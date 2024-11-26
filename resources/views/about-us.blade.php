@@ -1,3 +1,3 @@
 <x-app-layout>
-<livewire:welcome />
+    <livewire:about-us />
 </x-app-layout>
