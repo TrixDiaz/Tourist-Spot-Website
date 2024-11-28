@@ -315,12 +315,24 @@
                     <!-- Gallery Section -->
                     <div>
                         <p class="text-gray-500 text-md font-semibold mb-4">Photo Gallery</p>
-                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                            @foreach($touristSpots as $spot)
-                            <template x-if="selectedSpot === {{ $spot->id }}">
-                                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                                    @if($spot->images && is_array($spot->images))
-                                    @foreach($spot->images as $image)
+                        @foreach($touristSpots as $spot)
+                        <template x-if="selectedSpot === {{ $spot->id }}">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                @if($spot->images && is_array($spot->images))
+                                <!-- Large featured image on the left -->
+                                @if(isset($spot->images[0]))
+                                <div class="aspect-square md:aspect-auto md:h-full overflow-hidden rounded-lg">
+                                    <img
+                                        src="{{ Storage::disk('public')->url($spot->images[0]) }}"
+                                        alt="{{ $spot->name }} featured image"
+                                        class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                                        onerror="this.src='https://placehold.co/600x400'">
+                                </div>
+                                @endif
+
+                                <!-- Grid of smaller images on the right -->
+                                <div class="grid grid-cols-2 gap-4">
+                                    @foreach(array_slice($spot->images, 1) as $image)
                                     <div class="aspect-square overflow-hidden rounded-lg">
                                         <img
                                             src="{{ Storage::disk('public')->url($image) }}"
@@ -329,13 +341,13 @@
                                             onerror="this.src='https://placehold.co/600x400'">
                                     </div>
                                     @endforeach
-                                    @else
-                                    <div class="col-span-full text-center text-gray-500">No images available</div>
-                                    @endif
                                 </div>
-                            </template>
-                            @endforeach
-                        </div>
+                                @else
+                                <div class="col-span-full text-center text-gray-500">No images available</div>
+                                @endif
+                            </div>
+                        </template>
+                        @endforeach
                     </div>
                 </div>
             </div>
