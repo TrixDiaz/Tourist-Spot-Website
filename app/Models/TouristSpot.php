@@ -12,6 +12,10 @@ class TouristSpot extends Model
 
     protected $fillable = ['name', 'address', 'description', 'price', 'accomodation', 'amenities', 'latitude', 'longitude', 'images'];
 
+    protected $casts = [
+        'images' => 'array'
+    ];
+
     public function reviews()
     {
         return $this->hasMany(TouristSpotReview::class);

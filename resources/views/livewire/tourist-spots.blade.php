@@ -311,6 +311,32 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Gallery Section -->
+                    <div>
+                        <p class="text-gray-500 text-md font-semibold mb-4">Photo Gallery</p>
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            @foreach($touristSpots as $spot)
+                            <template x-if="selectedSpot === {{ $spot->id }}">
+                                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                    @if($spot->images && is_array($spot->images))
+                                    @foreach($spot->images as $image)
+                                    <div class="aspect-square overflow-hidden rounded-lg">
+                                        <img
+                                            src="{{ Storage::disk('public')->url($image) }}"
+                                            alt="{{ $spot->name }} image"
+                                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                                            onerror="this.src='https://placehold.co/600x400'">
+                                    </div>
+                                    @endforeach
+                                    @else
+                                    <div class="col-span-full text-center text-gray-500">No images available</div>
+                                    @endif
+                                </div>
+                            </template>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

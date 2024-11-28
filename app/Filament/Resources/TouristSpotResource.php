@@ -42,8 +42,10 @@ class TouristSpotResource extends Resource
                 Forms\Components\TextInput::make('longitude')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Textarea::make('images')
+                Forms\Components\FileUpload::make('images')
+                    ->disk('public')
                     ->required()
+                    ->multiple()
                     ->columnSpanFull(),
             ]);
     }
