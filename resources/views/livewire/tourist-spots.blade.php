@@ -22,7 +22,14 @@
     <!-- Content Cards Section -->
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         @foreach ($touristSpots as $spot)
-        <div class="group mx-2 grid max-w-screen-lg grid-cols-1 space-x-8 overflow-hidden rounded-lg border text-gray-700 shadow transition hover:shadow-lg sm:mx-auto sm:grid-cols-5">
+        <div class="group mx-2 grid max-w-screen-lg grid-cols-1 space-x-8 overflow-hidden rounded-lg border text-gray-700 shadow transition hover:shadow-lg sm:mx-auto sm:grid-cols-5"
+            x-data="{ shown: false }"
+            x-intersect="shown = true"
+            x-transition:enter="transition ease-out duration-1000"
+            x-transition:enter-start="opacity-0 transform translate-y-16"
+            x-transition:enter-end="opacity-100 transform translate-y-0"
+            :class="{ 'opacity-0': !shown, 'opacity-100': shown }"
+            style="transition-delay: calc({{ $loop->index }} * 100ms);">
             <a href="#" class="col-span-2 text-left text-gray-600 hover:text-gray-700">
                 <div class="group relative h-full w-full overflow-hidden">
                     <img src="https://placehold.co/600x400" alt="" class="h-full w-full border-none object-cover text-gray-700 transition group-hover:scale-125" />
@@ -202,10 +209,18 @@
 
         <!-- Modal Content -->
         <div class="relative min-h-screen flex items-center justify-center p-4">
-            <div class="relative bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="relative bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+                x-data="{ showGallery: false }">
                 <!-- Modal Body -->
                 <div class="p-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6"
+                        x-show="!showGallery"
+                        x-transition:enter="transition ease duration-250"
+                        x-transition:enter-start="opacity-0 transform -translate-y-4"
+                        x-transition:enter-end="opacity-100 transform translate-y-0"
+                        x-transition:leave="transition ease duration-250"
+                        x-transition:leave-start="opacity-100 transform translate-y-0"
+                        x-transition:leave-end="opacity-0 transform -translate-y-4">
                         <!-- Map Section - Will appear first on mobile -->
                         <div class="flex flex-col items-end justify-between md:order-2">
                             <button @click="showModal = false" class="text-gray-600 hover:text-gray-900">
@@ -227,7 +242,10 @@
                                     <p class="text-[#19147A] text-3xl font-semibold">{{ $spot->name }}</p>
                                     <p class="font-semibold text-sm text-gray-600 my-4">Address: <br> <span class="font-normal text-md text-black">{{ $spot->address }}</span></p>
                                     <p class="font-semibold text-sm text-gray-600">Description: <br> <span class="font-normal text-md text-black">{{ $spot->description }}</span></p>
-                                    <button class="text-[#19147A] underline text-sm rounded-md">View Photos</button>
+                                    <button @click="showGallery = true"
+                                        class="text-[#19147A] underline text-sm rounded-md">
+                                        View Photos
+                                    </button>
                                 </div>
                             </template>
                             @endforeach
@@ -313,7 +331,22 @@
                     </div>
 
                     <!-- Gallery Section -->
-                    <div>
+                    <div x-show="showGallery"
+                        x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 transform translate-y-4"
+                        x-transition:enter-end="opacity-100 transform translate-y-0"
+                        x-transition:leave="transition ease-in duration-200"
+                        x-transition:leave-start="opacity-100 transform translate-y-0"
+                        x-transition:leave-end="opacity-0 transform translate-y-4">
+                        <!-- Add back button -->
+                        <button @click="showGallery = false"
+                            class="mb-4 flex items-center text-gray-600 hover:text-gray-900">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                            </svg>
+                            Back to details
+                        </button>
+
                         <p class="text-gray-500 text-md font-semibold mb-4">Photo Gallery</p>
                         @foreach($touristSpots as $spot)
                         <template x-if="selectedSpot === {{ $spot->id }}">
