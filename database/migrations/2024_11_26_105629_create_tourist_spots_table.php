@@ -16,10 +16,12 @@ return new class extends Migration
             $table->string('name');
             $table->string('address');
             $table->string('description');
+            $table->string('accomodation');
+            $table->string('amenities');
             $table->decimal('price', 10, 2);
+            $table->json('images');
             $table->string('latitude');
             $table->string('longitude');
-            $table->json('images');
             $table->softDeletes();
             $table->timestamps();
         });

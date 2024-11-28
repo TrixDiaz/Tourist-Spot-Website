@@ -1,4 +1,4 @@
-<div class="mx-auto max-w-7xl min-h-screen mt-4" x-data="{ filterOpen: false }">
+<div class="mx-auto max-w-7xl min-h-screen mt-4" x-data="{ filterOpen: false, showModal: false, selectedSpot: null }">
     <div class="flex flex-row items-center justify-between">
         <h1 class="text-[#19147A] text-3xl md:text-4xl font-bold mb-6"><span class="text-slate-900">Choose your </span>Spot</h1>
         <div class="flex flex-row items-center justify-center gap-4">
@@ -38,20 +38,22 @@
                 <div class="flex flex-row items-center justify-between py-2">
                     <div class="mt-2 flex items-center">
                         @php
-                            $avgRating = round($spot->reviews_avg_rating ?? 0);
+                        $avgRating = round($spot->reviews_avg_rating ?? 0);
                         @endphp
                         @for ($i = 1; $i <= 5; $i++)
-                            <svg class="block h-3 w-3 align-middle {{ $i <= $avgRating ? 'text-yellow-500' : 'text-gray-400' }} sm:h-4 sm:w-4" 
-                                 xmlns="http://www.w3.org/2000/svg" 
-                                 viewBox="0 0 20 20" 
-                                 fill="currentColor">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            <svg class="block h-3 w-3 align-middle {{ $i <= $avgRating ? 'text-yellow-500' : 'text-gray-400' }} sm:h-4 sm:w-4"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                             </svg>
-                        @endfor
-                        <span class="ml-2 text-sm text-gray-600">({{ number_format($spot->reviews_avg_rating, 1) }})</span>
+                            @endfor
+                            <span class="ml-2 text-sm text-gray-600">({{ number_format($spot->reviews_avg_rating, 1) }})</span>
                     </div>
                     <div>
-                        <x-icons.arrow-top-right-on-square-icon class="w-4 h-4 hover:text-slate-950 cursor-pointer" />
+                        <button @click="showModal = true; selectedSpot = {{ $spot->id }}" class="focus:outline-none">
+                            <x-icons.arrow-top-right-on-square-icon class="w-4 h-4 hover:text-slate-950 cursor-pointer" />
+                        </button>
                     </div>
                 </div>
                 <!-- End of Ratings -->
@@ -184,5 +186,61 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- Modal -->
+    <div x-show="showModal"
+        class="fixed inset-0 z-50 overflow-y-auto"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-300"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-black bg-opacity-50" @click="showModal = false"></div>
+
+        <!-- Modal Content -->
+        <div class="relative min-h-screen flex items-center justify-center p-4">
+            <div class="relative bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                <!-- Modal Body -->
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Map Section - Will appear first on mobile -->
+                        <div class="flex flex-col items-end justify-between md:order-2">
+                            <button @click="showModal = false" class="text-gray-600 hover:text-gray-900">
+                                <x-icons.x-mark-icon class="w-6 h-6" />
+                            </button>
+                            <div class="mapswrapper w-full h-[300px] md:h-full object-cover rounded-lg mt-4">
+                                <iframe loading="lazy" width="100%" height="100%" allowfullscreen
+                                    src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=Quezon%20City&zoom=10&maptype=roadmap">
+                                </iframe>
+                                <span class="sr-only">Map</span>
+                            </div>
+                        </div>
+
+                        <!-- Content Section - Will appear second on mobile -->
+                        <div class="space-y-4 md:order-1">
+                            @foreach($touristSpots as $spot)
+                            <template x-if="selectedSpot === {{ $spot->id }}">
+                                <div class="space-y-4">
+                                    <p class="text-[#19147A] text-3xl font-semibold">{{ $spot->name }}</p>
+                                    <p class="font-semibold text-sm text-gray-600">Address: <br> <span class="font-normal text-md text-black">{{ $spot->address }}</span></p>
+                                    <p class="font-semibold text-sm text-gray-600">Description: <br> <span class="font-normal text-md text-black">{{ $spot->description }}</span></p>
+                                    <p class="font-semibold text-sm text-gray-600">Accomodation: <br> <span class="font-normal text-md text-black">{{ $spot->accomodation }}</span></p>
+                                    <p class="font-semibold text-sm text-gray-600">Price: <br> <span class="font-normal text-md text-black">{{ $spot->price }}</span></p>
+                                    <p class="font-semibold text-sm text-gray-600">Amenities: <br> <span class="font-normal text-md text-black">{{ $spot->amenities }}</span></p>
+                                    <div class="flex flex-row items-center justify-between mt-8">
+                                        <button class="text-[#19147A] underline text-sm py-2 rounded-md">View Photos</button>
+                                        <button class="text-[#19147A] underline text-sm py-2 rounded-md">Send/View Feedback</button>
+                                    </div>
+                                </div>
+                            </template>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
