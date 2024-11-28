@@ -237,8 +237,8 @@
                                 <div class="space-y-4">
                                     @foreach($touristSpots as $spot)
                                     <template x-if="selectedSpot === {{ $spot->id }}">
-                                        <div class="space-y-4">
-                                            @forelse($spot->reviews()->latest()->take(5)->get() as $review)
+                                        <div class="space-y-2 border p-4 rounded-md">
+                                            @forelse($spot->reviews()->latest()->take(3)->get() as $review)
                                             <div class="flex items-start gap-4">
                                                 <div class="flex-shrink-0">
                                                     <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
