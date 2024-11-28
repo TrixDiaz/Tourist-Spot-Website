@@ -1,4 +1,4 @@
-<div class="mx-auto max-w-7xl min-h-screen mt-12" x-data="{ filterOpen: false }">
+<div class="mx-auto max-w-7xl min-h-screen mt-4" x-data="{ filterOpen: false }">
     <div class="flex flex-row items-center justify-between">
         <h1 class="text-[#19147A] text-3xl md:text-4xl font-bold mb-6"><span class="text-slate-900">Choose your </span>Spot</h1>
         <div class="flex flex-row items-center justify-center gap-4">
@@ -61,7 +61,7 @@
     </div>
 
     <!-- Load More Button -->
-    <div class="flex justify-center items-center mt-8 mb-8">
+    <div class="flex justify-center items-center my-8">
         @if($touristSpots->hasMorePages())
         <button
             wire:click="loadMore"
