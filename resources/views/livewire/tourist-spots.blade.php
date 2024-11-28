@@ -1,4 +1,4 @@
-<div class="mx-auto max-w-7xl min-h-screen mt-12">
+<div class="mx-auto max-w-7xl min-h-screen mt-12" x-data="{ filterOpen: false }">
     <div class="flex flex-row items-center justify-between">
         <h1 class="text-[#19147A] text-3xl md:text-4xl font-bold mb-6"><span class="text-slate-900">Choose your </span>Spot</h1>
         <div class="flex flex-row items-center justify-center gap-4">
@@ -37,21 +37,18 @@
                 <!-- Ratings -->
                 <div class="flex flex-row items-center justify-between py-2">
                     <div class="mt-2 flex items-center">
-                        <svg class="block h-3 w-3 align-middle text-yellow-500 sm:h-4 sm:w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" class=""></path>
-                        </svg>
-                        <svg class="block h-3 w-3 align-middle text-yellow-500 sm:h-4 sm:w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" class=""></path>
-                        </svg>
-                        <svg class="block h-3 w-3 align-middle text-yellow-500 sm:h-4 sm:w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" class=""></path>
-                        </svg>
-                        <svg class="block h-3 w-3 align-middle text-yellow-500 sm:h-4 sm:w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" class=""></path>
-                        </svg>
-                        <svg class="block h-3 w-3 align-middle text-gray-400 sm:h-4 sm:w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" class=""></path>
-                        </svg>
+                        @php
+                            $avgRating = round($spot->reviews_avg_rating ?? 0);
+                        @endphp
+                        @for ($i = 1; $i <= 5; $i++)
+                            <svg class="block h-3 w-3 align-middle {{ $i <= $avgRating ? 'text-yellow-500' : 'text-gray-400' }} sm:h-4 sm:w-4" 
+                                 xmlns="http://www.w3.org/2000/svg" 
+                                 viewBox="0 0 20 20" 
+                                 fill="currentColor">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                        @endfor
+                        <span class="ml-2 text-sm text-gray-600">({{ number_format($spot->reviews_avg_rating, 1) }})</span>
                     </div>
                     <div>
                         <x-icons.arrow-top-right-on-square-icon class="w-4 h-4 hover:text-slate-950 cursor-pointer" />
@@ -80,7 +77,7 @@
     </div>
 
     <!-- Filter Drawer -->
-    <div x-data="{ filterOpen: false }" @keydown.escape.window="filterOpen = false">
+    <div @keydown.escape.window="filterOpen = false">
         <!-- Backdrop -->
         <div x-show="filterOpen"
             x-transition:enter="transition ease-out duration-300"
@@ -107,17 +104,82 @@
             <!-- Drawer Content -->
             <div class="h-full p-4">
                 <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl font-semibold">Filters</h3>
+                    <h3 class="text-xl text-gray-600 font-semibold">Filters</h3>
                     <button @click="filterOpen = false" class="p-2 hover:bg-gray-100 rounded-full">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
                 </div>
-
-                <!-- Add your filter content here -->
-                <div class="space-y-4">
-                    <!-- Filter content goes here -->
+                <!-- Filter Star Content -->
+                <div class="space-y-4 flex flex-col">
+                    <p class="text-gray-600 font-semibold">Rating</p>
+                    <ul class="grid grid-cols-2 gap-4">
+                        @foreach([5,4,3,2,1] as $stars)
+                        <li>
+                            <input type="radio"
+                                id="{{ $stars }}-stars"
+                                wire:model="rating"
+                                value="{{ $stars }}"
+                                name="rating"
+                                class="hidden peer">
+                            <label for="{{ $stars }}-stars"
+                                class="inline-flex items-center justify-center bg-[#D9D9D9] w-full p-2.5 rounded-md cursor-pointer peer-checked:bg-violet-600 peer-checked:text-white">
+                                <p class="text-normal text-center">{{ $stars }} Star{{ $stars > 1 ? 's' : '' }} & up</p>
+                            </label>
+                        </li>
+                        @endforeach
+                    </ul>
+                </div>
+                <!-- Price Range Content -->
+                <div class="space-y-4 flex flex-col mt-4">
+                    <p class="text-gray-600 font-semibold">Price Range</p>
+                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-[#D9D9D9]/50 p-4 rounded-md">
+                        <li>
+                            <input type="radio" id="min-price" value="0" name="price" class="hidden peer">
+                            <label for="min-price" class="inline-flex items-center justify-center bg-[#D9D9D9] w-full p-2.5 rounded-md cursor-pointer peer-checked:bg-violet-600 peer-checked:text-white">
+                                <p class="text-normal text-center">MIN</p>
+                            </label>
+                        </li>
+                        <li>
+                            <input type="radio" id="max-price" value="100" name="price" class="hidden peer">
+                            <label for="max-price" class="inline-flex items-center justify-center bg-[#D9D9D9] w-full p-2.5 rounded-md cursor-pointer peer-checked:bg-violet-600 peer-checked:text-white">
+                                <p class="text-normal text-center">MAX</p>
+                            </label>
+                        </li>
+                    </ul>
+                    <ul class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        @foreach([
+                        'lower' => '0-100',
+                        'middle' => '500-1000',
+                        'max' => '1000-2000'
+                        ] as $id => $range)
+                        <li>
+                            <input type="radio"
+                                id="{{ $id }}"
+                                wire:model="priceRange"
+                                value="{{ $range }}"
+                                name="price"
+                                class="hidden peer">
+                            <label for="{{ $id }}"
+                                class="inline-flex items-center justify-center bg-[#D9D9D9] w-full p-2.5 rounded-md cursor-pointer peer-checked:bg-violet-600 peer-checked:text-white">
+                                <p class="text-normal text-center">{{ $range }}</p>
+                            </label>
+                        </li>
+                        @endforeach
+                    </ul>
+                </div>
+                <!-- Clear and Apply Filters -->
+                <div class="flex flex-row items-center justify-between gap-4 my-4">
+                    <button wire:click="clearFilters"
+                        class="bg-transparent hover:bg-[#19147A] hover:text-white text-black w-full px-4 py-2 rounded-md">
+                        Clear
+                    </button>
+                    <button wire:click="applyFilters"
+                        @click="filterOpen = false"
+                        class="bg-[#19147A] hover:bg-emerald-600 text-white w-full px-4 py-2 rounded-md">
+                        Apply
+                    </button>
                 </div>
             </div>
         </div>

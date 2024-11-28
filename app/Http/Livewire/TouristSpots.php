@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Http\Livewire;
 
 use App\Models\TouristSpot;
 use Livewire\Component;
@@ -10,15 +10,9 @@ class TouristSpots extends Component
 {
     use WithPagination;
 
-    public $search = '';
-    public $perPage = 6;
     public $rating = null;
     public $priceRange = null;
-
-    public function loadMore()
-    {
-        $this->perPage += 4;
-    }
+    public $search = '';
 
     public function getTouristSpotsProperty()
     {
@@ -32,24 +26,19 @@ class TouristSpots extends Component
             })
             ->when($this->rating, function ($query) {
                 $query->whereHas('reviews', function ($q) {
-                    $q->select('tourist_spot_id')
-                        ->groupBy('tourist_spot_id')
-                        ->havingRaw('AVG(rating) >= ?', [$this->rating]);
+                    $q->havingRaw('AVG(rating) >= ?', [$this->rating]);
                 });
             })
             ->when($this->priceRange, function ($query) {
                 [$min, $max] = explode('-', $this->priceRange);
                 $query->whereBetween('price', [$min, $max]);
             })
-            ->withAvg('reviews', 'rating')
-            ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage);
+            ->paginate(10);
     }
 
     public function applyFilters()
     {
         $this->resetPage();
-        $this->dispatch('filters-applied');
     }
 
     public function clearFilters()
@@ -61,8 +50,6 @@ class TouristSpots extends Component
 
     public function render()
     {
-        return view('livewire.tourist-spots', [
-            'touristSpots' => $this->touristSpots
-        ]);
+        return view('livewire.tourist-spots');
     }
-}
+} 

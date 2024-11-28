@@ -10,7 +10,7 @@ class TouristSpot extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'address', 'description', 'latitude', 'longitude', 'images'];
+    protected $fillable = ['name', 'address', 'description', 'price', 'latitude', 'longitude', 'images'];
 
     public function reviews()
     {
