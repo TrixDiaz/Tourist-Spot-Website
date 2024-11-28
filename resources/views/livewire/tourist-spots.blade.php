@@ -223,20 +223,92 @@
                         <div class="space-y-4 md:order-1">
                             @foreach($touristSpots as $spot)
                             <template x-if="selectedSpot === {{ $spot->id }}">
-                                <div class="space-y-4">
+                                <div>
                                     <p class="text-[#19147A] text-3xl font-semibold">{{ $spot->name }}</p>
-                                    <p class="font-semibold text-sm text-gray-600">Address: <br> <span class="font-normal text-md text-black">{{ $spot->address }}</span></p>
+                                    <p class="font-semibold text-sm text-gray-600 my-4">Address: <br> <span class="font-normal text-md text-black">{{ $spot->address }}</span></p>
                                     <p class="font-semibold text-sm text-gray-600">Description: <br> <span class="font-normal text-md text-black">{{ $spot->description }}</span></p>
-                                    <p class="font-semibold text-sm text-gray-600">Accomodation: <br> <span class="font-normal text-md text-black">{{ $spot->accomodation }}</span></p>
-                                    <p class="font-semibold text-sm text-gray-600">Price: <br> <span class="font-normal text-md text-black">{{ $spot->price }}</span></p>
-                                    <p class="font-semibold text-sm text-gray-600">Amenities: <br> <span class="font-normal text-md text-black">{{ $spot->amenities }}</span></p>
-                                    <div class="flex flex-row items-center justify-between mt-8">
-                                        <button class="text-[#19147A] underline text-sm py-2 rounded-md">View Photos</button>
-                                        <button class="text-[#19147A] underline text-sm py-2 rounded-md">Send/View Feedback</button>
-                                    </div>
+                                    <button class="text-[#19147A] underline text-sm rounded-md">View Photos</button>
                                 </div>
                             </template>
                             @endforeach
+                            <!-- Reviews Section -->
+                            <div>
+                                <p class="text-gray-500 text-md font-semibold mb-4">Feedback and Reviews</p>
+                                <div class="space-y-4">
+                                    @foreach($touristSpots as $spot)
+                                    <template x-if="selectedSpot === {{ $spot->id }}">
+                                        <div class="space-y-4">
+                                            @forelse($spot->reviews()->latest()->take(5)->get() as $review)
+                                            <div class="flex items-start gap-4">
+                                                <div class="flex-shrink-0">
+                                                    <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                                        <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <div class="flex justify-between items-start">
+                                                        <p class="text-sm font-semibold">{{ $review->user->name }}</p>
+                                                        <span class="text-xs text-gray-500">{{ $review->created_at->diffForHumans() }}</span>
+                                                    </div>
+                                                    <p class="text-sm text-gray-800">{{ $review->comment }}</p>
+                                                    <div class="flex items-center mt-1">
+                                                        @for($i = 1; $i <= 5; $i++)
+                                                            <svg class="w-4 h-4 {{ $i <= $review->rating ? 'text-yellow-500' : 'text-gray-300' }}"
+                                                            fill="currentColor"
+                                                            viewBox="0 0 20 20">
+                                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                                            </svg>
+                                                            @endfor
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @empty
+                                            <p class="text-gray-500 text-sm">No reviews yet.</p>
+                                            @endforelse
+
+                                            <!-- Add Review Input -->
+                                            @auth
+                                            <div class="mt-6">
+                                                <form wire:submit.prevent="addReview({{ $spot->id }})">
+                                                    <div class="mb-3">
+                                                        <div class="flex items-center space-x-1">
+                                                            @for($i = 1; $i <= 5; $i++)
+                                                                <button type="button" wire:click="setRating({{ $i }})"
+                                                                class="focus:outline-none">
+                                                                <svg class="w-5 h-5 {{ $i <= $newReviewRating ? 'text-yellow-500' : 'text-gray-300' }}"
+                                                                    fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                                                </svg>
+                                                                </button>
+                                                                @endfor
+                                                        </div>
+                                                    </div>
+                                                    <div class="relative">
+                                                        <input type="text"
+                                                            wire:model="newReviewComment"
+                                                            class="w-full px-4 py-2 pr-12 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                                            placeholder="Enter your feedback...">
+                                                        <button type="submit"
+                                                            class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            @else
+                                            <div class="mt-6">
+                                                <p class="text-sm text-gray-600">Please <a href="{{ route('login') }}" class="text-blue-600 hover:underline">login</a> to add a review.</p>
+                                            </div>
+                                            @endauth
+                                        </div>
+                                    </template>
+                                    @endforeach
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

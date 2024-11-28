@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\TouristSpot;
+use App\Models\TouristSpotReview;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -14,6 +15,8 @@ class TouristSpots extends Component
     public $perPage = 6;
     public $rating = null;
     public $priceRange = null;
+    public $newReviewComment = '';
+    public $newReviewRating = 0;
 
     public function loadMore()
     {
@@ -41,6 +44,7 @@ class TouristSpots extends Component
                 [$min, $max] = explode('-', $this->priceRange);
                 $query->whereBetween('price', [$min, $max]);
             })
+            ->with(['reviews.user'])
             ->withAvg('reviews', 'rating')
             ->orderBy('created_at', 'desc')
             ->paginate($this->perPage);
@@ -64,5 +68,34 @@ class TouristSpots extends Component
         return view('livewire.tourist-spots', [
             'touristSpots' => $this->touristSpots
         ]);
+    }
+
+    public function setRating($rating)
+    {
+        $this->newReviewRating = $rating;
+    }
+
+    public function addReview($spotId)
+    {
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+
+        $this->validate([
+            'newReviewComment' => 'required|min:3',
+            'newReviewRating' => 'required|integer|min:1|max:5',
+        ]);
+
+        TouristSpotReview::create([
+            'tourist_spot_id' => $spotId,
+            'user_id' => auth()->id(),
+            'comment' => $this->newReviewComment,
+            'rating' => $this->newReviewRating,
+        ]);
+
+        $this->newReviewComment = '';
+        $this->newReviewRating = 0;
+
+        $this->dispatch('review-added');
     }
 }
