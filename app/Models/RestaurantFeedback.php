@@ -14,6 +14,7 @@ class RestaurantFeedback extends Model
         'user_id',
         'comment',
         'rating',
+        'is_active'
     ];
 
     public function restaurant()

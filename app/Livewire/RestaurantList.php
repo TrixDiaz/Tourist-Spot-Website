@@ -60,6 +60,34 @@ class RestaurantList extends Component
         $this->resetPage();
     }
 
+    public function setRating($value)
+    {
+        $this->newReviewRating = $value;
+    }
+
+    public function addReview($restaurantId)
+    {
+        // Validate the input
+        $this->validate([
+            'newReviewComment' => 'required|min:3',
+            'newReviewRating' => 'required|integer|between:1,5',
+        ]);
+
+        // Create the review
+        auth()->user()->restaurantFeedbacks()->create([
+            'restaurant_id' => $restaurantId,
+            'comment' => $this->newReviewComment,
+            'rating' => $this->newReviewRating,
+            'is_active' => true,
+        ]);
+
+        // Reset the form
+        $this->reset(['newReviewComment', 'newReviewRating']);
+
+        // Optional: Show a success message
+        toastr()->success('Review added successfully');
+    }
+
     public function render()
     {
         return view('livewire.restaurant-list', [

@@ -97,5 +97,7 @@ class TouristSpots extends Component
         $this->newReviewRating = 0;
 
         $this->dispatch('review-added');
+
+        toastr()->success('Review added successfully');
     }
 }
