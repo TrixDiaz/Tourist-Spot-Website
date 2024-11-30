@@ -41,10 +41,13 @@
 
     @if($newsEventCategories->count() >= $limit)
     <div class="flex justify-center my-8">
-        <x-secondary-button
-            wire:click="loadMore">
-            See More
-        </x-secondary-button>
+        <button
+            wire:click="loadMore"
+            class="flex flex-row items-center justify-center gap-1 text-sm font-semibold">
+            <span>See More</span>
+            <x-icons.chevron-down-icon class="w-4 h-4" />
     </div>
-    @endif
+    </button>
+</div>
+@endif
 </div>

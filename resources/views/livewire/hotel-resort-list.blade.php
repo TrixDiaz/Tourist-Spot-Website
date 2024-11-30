@@ -93,8 +93,9 @@
     <div class="flex justify-center mt-8 mb-6">
         @if($hotelResorts->hasMorePages())
         <button wire:click="loadMore"
-            class="px-6 py-2 bg-[#19147A] text-white rounded-md hover:bg-emerald-600 transition-colors duration-200">
+            class="flex flex-row items-center justify-center gap-1 text-sm font-semibold">
             See More
+            <x-icons.chevron-down-icon class="w-4 h-4" />
         </button>
         @endif
     </div>
