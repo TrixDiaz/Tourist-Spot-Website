@@ -38,7 +38,7 @@ class NewsEventCategoryResource extends Resource
                 Forms\Components\TextInput::make('description')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Textarea::make('images')
+                Forms\Components\FileUpload::make('images')
                     ->required()
                     ->columnSpanFull(),
                 Forms\Components\Toggle::make('is_active')
@@ -57,7 +57,7 @@ class NewsEventCategoryResource extends Resource
                     ->label('Image')
                     ->defaultImageUrl(fn($record) => $record->images === null ? asset('https://placehold.co/600x800') : null),
                 Tables\Columns\TextColumn::make('name')
-                    ->description(fn ($record) => $record->slug)
+                    ->description(fn($record) => $record->slug)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('description')
                     ->limit(10)
@@ -84,8 +84,8 @@ class NewsEventCategoryResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ForceDeleteAction::make()->visible(fn ($record) => $record->deleted_at !== null),
-                Tables\Actions\RestoreAction::make()->visible(fn ($record) => $record->deleted_at !== null),
+                Tables\Actions\ForceDeleteAction::make()->visible(fn($record) => $record->deleted_at !== null),
+                Tables\Actions\RestoreAction::make()->visible(fn($record) => $record->deleted_at !== null),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

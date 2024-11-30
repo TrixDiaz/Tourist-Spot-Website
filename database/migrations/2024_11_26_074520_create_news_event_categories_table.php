@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug');
             $table->string('description');
-            $table->json('images');
+            $table->string('images');
             $table->boolean('is_active')->default(true);
             $table->softDeletes();
             $table->timestamps();
