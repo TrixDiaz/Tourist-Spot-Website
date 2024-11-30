@@ -17,4 +17,9 @@ class ProductCategory extends Model
     {
         return $this->hasMany(Product::class)->where('is_active', true);
     }
+
+    public function restaurant(): BelongsTo
+    {
+        return $this->belongsTo(Restaurant::class);
+    }
 }

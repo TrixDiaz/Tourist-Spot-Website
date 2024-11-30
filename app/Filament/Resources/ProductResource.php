@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ProductResource extends Resource
 {
-    protected static ?string $navigationGroup = 'Products';
+    protected static ?string $navigationGroup = 'Restaurant';
 
     protected static ?string $model = Product::class;
 
@@ -42,8 +42,10 @@ class ProductResource extends Resource
                     ->required()
                     ->numeric()
                     ->prefix('$'),
-                Forms\Components\Textarea::make('images')
-                    ->columnSpanFull(),
+                Forms\Components\FileUpload::make('images')
+                    ->columnSpanFull()
+                    ->disk('public')
+                    ->multiple(),
                 Forms\Components\Toggle::make('is_active')
                     ->required(),
             ]);
@@ -53,11 +55,11 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('productCategory.name')
-                    ->label('Category')
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('restaurant.name')
+                    ->label('Restaurant')
+                    ->description(fn($record) => $record->productCategory->name),
                 Tables\Columns\TextColumn::make('name')
-                    ->description(fn ($record) => $record->slug)
+                    ->description(fn($record) => $record->slug)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('price')
                     ->money()
@@ -90,8 +92,8 @@ class ProductResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ForceDeleteAction::make()->visible(fn (Product $record): bool => $record->deleted_at !== null),
-                Tables\Actions\RestoreAction::make()->visible(fn (Product $record): bool => $record->deleted_at !== null),
+                Tables\Actions\ForceDeleteAction::make()->visible(fn(Product $record): bool => $record->deleted_at !== null),
+                Tables\Actions\RestoreAction::make()->visible(fn(Product $record): bool => $record->deleted_at !== null),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

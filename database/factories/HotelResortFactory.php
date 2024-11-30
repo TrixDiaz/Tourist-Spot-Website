@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Restaurant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -26,6 +27,7 @@ class HotelResortFactory extends Factory
             'price' => fake()->numberBetween(100, 1000),
             'amenities' => json_encode([fake()->sentence(), fake()->sentence(), fake()->sentence()]),
             'images' => json_encode([fake()->imageUrl(), fake()->imageUrl(), fake()->imageUrl()]),
+            'restaurant_id' => Restaurant::factory(),
         ];
     }
 }

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('restaurant_id');
             $table->unsignedBigInteger('product_category_id');
             $table->string('name');
             $table->string('slug')->unique();
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->json('images')->nullable();
             $table->boolean('is_active')->default(true);
             $table->foreign('product_category_id')->references('id')->on('product_categories');
+            $table->foreign('restaurant_id')->references('id')->on('restaurants');
             $table->softDeletes();
             $table->timestamps();
         });

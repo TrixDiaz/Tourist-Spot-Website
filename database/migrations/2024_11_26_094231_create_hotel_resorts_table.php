@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('hotel_resorts', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('restaurant_id');
             $table->string('address');
             $table->string('description');
             $table->string('accommodation');
@@ -23,6 +24,7 @@ return new class extends Migration
             $table->enum('type', ['hotel', 'resort']);
             $table->json('images');
             $table->boolean('is_active')->default(true);
+            $table->foreign('restaurant_id')->references('id')->on('restaurants')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

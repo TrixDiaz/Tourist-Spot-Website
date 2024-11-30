@@ -2,27 +2,23 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ProductCategoryResource\Pages;
-use App\Filament\Resources\ProductCategoryResource\RelationManagers;
-use App\Models\ProductCategory;
+use App\Filament\Resources\RestaurantResource\Pages;
+use App\Filament\Resources\RestaurantResource\RelationManagers;
+use App\Models\Restaurant;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class ProductCategoryResource extends Resource
+class RestaurantResource extends Resource
 {
     protected static ?string $navigationGroup = 'Restaurant';
+    protected static ?string $model = Restaurant::class;
 
-    protected static ?string $navigationLabel = 'Categories';
-
-    protected static ?string $model = ProductCategory::class;
-
-    protected static ?string $navigationIcon = 'heroicon-o-tag';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
@@ -31,11 +27,25 @@ class ProductCategoryResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('slug')
+                Forms\Components\TextInput::make('email')
+                    ->email()
+                    ->maxLength(255)
+                    ->default(null),
+                Forms\Components\TextInput::make('address')
+                    ->maxLength(255)
+                    ->default(null),
+                Forms\Components\TextInput::make('phone')
+                    ->tel()
+                    ->maxLength(255)
+                    ->default(null),
+                Forms\Components\FileUpload::make('images')
+                    ->disk('public')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\Toggle::make('is_active')
-                    ->required(),
+                    ->multiple()
+                    ->columnSpanFull(),
+                Forms\Components\TextInput::make('website')
+                    ->maxLength(255)
+                    ->default(null),
             ]);
     }
 
@@ -45,12 +55,14 @@ class ProductCategoryResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('slug')
+                Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\ToggleColumn::make('is_active')
-                    ->label('Active')
-                    ->onIcon('heroicon-o-bolt')
-                    ->offIcon('heroicon-o-bolt-slash'),
+                Tables\Columns\TextColumn::make('address')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('phone')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('website')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -61,17 +73,10 @@ class ProductCategoryResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('is_active')
-                    ->options([
-                        true => 'Active',
-                        false => 'Inactive',
-                    ]),
+                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ForceDeleteAction::make()->visible(fn(ProductCategory $record): bool => $record->deleted_at !== null),
-                Tables\Actions\RestoreAction::make()->visible(fn(ProductCategory $record): bool => $record->deleted_at !== null),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -90,9 +95,9 @@ class ProductCategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListProductCategories::route('/'),
-            'create' => Pages\CreateProductCategory::route('/create'),
-            'edit' => Pages\EditProductCategory::route('/{record}/edit'),
+            'index' => Pages\ListRestaurants::route('/'),
+            'create' => Pages\CreateRestaurant::route('/create'),
+            'edit' => Pages\EditRestaurant::route('/{record}/edit'),
         ];
     }
 }
