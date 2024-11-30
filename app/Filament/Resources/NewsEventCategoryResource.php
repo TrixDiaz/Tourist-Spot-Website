@@ -66,7 +66,6 @@ class NewsEventCategoryResource extends Resource
 
                     Forms\Components\Section::make('Category Images')->schema([
                         Forms\Components\FileUpload::make('images')
-                            ->required()
                             ->columnSpanFull(),
                     ])->collapsed(),
                 ])->columnSpan([

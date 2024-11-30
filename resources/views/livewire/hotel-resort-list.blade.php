@@ -358,8 +358,8 @@
                         @foreach($hotelResorts as $hotel)
                         <template x-if="selectedHotel === {{ $hotel->id }}">
                             <div class="space-y-4">
-                                @if($hotel->events && count($hotel->events) > 0)
-                                @foreach($hotel->events as $event)
+                                @if($hotel->newsEventCategories && count($hotel->newsEventCategories) > 0)
+                                @foreach($hotel->newsEventCategories as $event)
                                 <div class="p-4 border rounded-lg">
                                     <h3 class="font-semibold">{{ $event->name }}</h3>
                                     <p class="text-sm text-gray-600">{{ $event->description }}</p>
