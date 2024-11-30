@@ -189,11 +189,11 @@ class HotelResortResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('address')
                     ->searchable()
                     ->limit(30),
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('description')
                     ->searchable()
                     ->limit(10)

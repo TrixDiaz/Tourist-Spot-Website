@@ -1,4 +1,4 @@
-<div class="mx-auto max-w-7xl min-h-screen mt-4" x-data="{ filterOpen: false, showModal: false, selectedHotel: null }">
+<div class="mx-auto max-w-7xl min-h-screen mt-4" x-data="{ filterOpen: false, showModal: false, selectedHotel: null, showGallery: false, showEvents: false, showReviews: false  }">
     <div class="flex flex-row items-center justify-between">
         <h1 class="text-[#19147A] text-3xl md:text-4xl font-bold mb-6">
             <span class="text-slate-900">Find your perfect </span>Stay
@@ -218,11 +218,11 @@
         <!-- Modal Content -->
         <div class="relative min-h-screen flex items-center justify-center p-4">
             <div class="relative bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-                x-data="{ showGallery: false }">
+                x-data="{ showGallery: false, showEvents: false, showReviews: false }">
                 <!-- Modal Body -->
                 <div class="p-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6"
-                        x-show="!showGallery"
+                        x-show="!showGallery && !showEvents && !showReviews"
                         x-transition:enter="transition ease duration-250"
                         x-transition:enter-start="opacity-0 transform -translate-y-4"
                         x-transition:enter-end="opacity-100 transform translate-y-0"
@@ -251,16 +251,21 @@
                                     <p class="font-semibold text-sm text-gray-600 my-4">Address: <br> <span class="font-normal text-md text-black">{{ $hotel->address }}</span></p>
                                     <p class="font-semibold text-sm text-gray-600">Description: <br> <span class="font-normal text-md text-black">{{ $hotel->description }}</span></p>
                                     <p class="font-semibold text-sm text-gray-600">Accommodation: <br> <span class="font-normal text-md text-black">{{ $hotel->accommodation }}</span></p>
-                                    <p class="font-semibold text-sm text-gray-600">Food Menu: <br> <span class="font-normal text-md text-black">
-                                            <button @click="showGallery = true"
-                                                class="text-[#19147A] underline text-sm rounded-md">
-                                                View Menu
-                                            </button></span></p>
+                                    <p class="font-semibold text-sm text-gray-600">
+                                        @if($hotel->restaurant)
+                                        Restaurant: <br>
+                                        <span class="font-normal text-md text-black">
+                                            {{ $hotel->restaurant->name }}
+                                        </span>
+                                        @else
+                                        <span class="font-normal text-md text-black">No restaurant available</span>
+                                        @endif
+                                    </p>
                                     <p class="font-semibold text-sm text-gray-600">Amenities: <br> <span class="font-normal text-md text-black">{{ $hotel->amenities }}</span></p>
                                     <p class="font-semibold text-sm text-gray-600">Price: <br> <span class="font-normal text-md text-black">₱{{ number_format($hotel->price, 2) }}/night</span></p>
 
 
-                                    <button @click="showGallery = true"
+                                    <button @click="showEvents = true"
                                         class="text-[#19147A] underline text-sm rounded-md">
                                         View Events
                                     </button>
@@ -269,7 +274,7 @@
                                             class="text-[#19147A] underline text-sm rounded-md">
                                             View Photos
                                         </button>
-                                        <button @click="showGallery = true"
+                                        <button @click="showReviews = true"
                                             class="text-[#19147A] underline text-sm rounded-md">
                                             View Reviews
                                         </button>
@@ -327,6 +332,85 @@
                                 </div>
                                 @else
                                 <div class="col-span-full text-center text-gray-500">No images available</div>
+                                @endif
+                            </div>
+                        </template>
+                        @endforeach
+                    </div>
+
+                    <!-- Events Section -->
+                    <div x-show="showEvents"
+                        x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 transform translate-y-4"
+                        x-transition:enter-end="opacity-100 transform translate-y-0"
+                        x-transition:leave="transition ease-in duration-200"
+                        x-transition:leave-start="opacity-100 transform translate-y-0"
+                        x-transition:leave-end="opacity-0 transform translate-y-4">
+                        <button @click="showEvents = false"
+                            class="mb-4 flex items-center text-gray-600 hover:text-gray-900">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                            </svg>
+                            Back to details
+                        </button>
+
+                        <p class="text-gray-500 text-md font-semibold mb-4">Events</p>
+                        @foreach($hotelResorts as $hotel)
+                        <template x-if="selectedHotel === {{ $hotel->id }}">
+                            <div class="space-y-4">
+                                @if($hotel->events && count($hotel->events) > 0)
+                                @foreach($hotel->events as $event)
+                                <div class="p-4 border rounded-lg">
+                                    <h3 class="font-semibold">{{ $event->name }}</h3>
+                                    <p class="text-sm text-gray-600">{{ $event->description }}</p>
+                                    <p class="text-sm text-gray-600">Date: {{ $event->date }}</p>
+                                </div>
+                                @endforeach
+                                @else
+                                <p class="text-gray-500">No events scheduled</p>
+                                @endif
+                            </div>
+                        </template>
+                        @endforeach
+                    </div>
+
+                    <!-- Reviews Section -->
+                    <div x-show="showReviews"
+                        x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 transform translate-y-4"
+                        x-transition:enter-end="opacity-100 transform translate-y-0"
+                        x-transition:leave="transition ease-in duration-200"
+                        x-transition:leave-start="opacity-100 transform translate-y-0"
+                        x-transition:leave-end="opacity-0 transform translate-y-4">
+                        <button @click="showReviews = false"
+                            class="mb-4 flex items-center text-gray-600 hover:text-gray-900">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                            </svg>
+                            Back to details
+                        </button>
+
+                        <p class="text-gray-500 text-md font-semibold mb-4">Reviews</p>
+                        @foreach($hotelResorts as $hotel)
+                        <template x-if="selectedHotel === {{ $hotel->id }}">
+                            <div class="space-y-4">
+                                @if($hotel->reviews && count($hotel->reviews) > 0)
+                                @foreach($hotel->reviews as $review)
+                                <div class="p-4 border rounded-lg">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <svg class="w-4 h-4 {{ $i <= $review->rating ? 'text-yellow-500' : 'text-gray-300' }}"
+                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                            </svg>
+                                            @endfor
+                                    </div>
+                                    <p class="text-sm text-gray-600">{{ $review->comment }}</p>
+                                    <p class="text-xs text-gray-500 mt-2">By {{ $review->user->name }} on {{ $review->created_at->format('M d, Y') }}</p>
+                                </div>
+                                @endforeach
+                                @else
+                                <p class="text-gray-500">No reviews yet</p>
                                 @endif
                             </div>
                         </template>

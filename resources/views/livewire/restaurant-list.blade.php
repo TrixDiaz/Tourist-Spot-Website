@@ -330,7 +330,7 @@
                                         alt="{{ $product->name }}"
                                         class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
                                     @endif
-                                    <div class="absolute bottom-0 left-0 right-0 text-white p-4">
+                                    <div class="absolute bottom-0 left-0 right-0 p-4 bg-white">
                                         <p class="font-semibold text-sm">{{ $product->name }}</p>
                                         <p class="text-xs">{{ $product->description }}</p>
                                         <p class="text-xs">₱{{ number_format($product->price, 2) }}</p>

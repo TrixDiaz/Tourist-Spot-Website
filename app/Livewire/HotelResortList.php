@@ -6,6 +6,7 @@ use App\Models\HotelResort;
 use App\Models\HotelResortFeedback;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Auth;
 
 
 class HotelResortList extends Component
@@ -81,7 +82,7 @@ class HotelResortList extends Component
 
     public function addReview($spotId)
     {
-        if (!auth()->check()) {
+        if (!Auth::check()) {
             return redirect()->route('login');
         }
 
@@ -92,7 +93,7 @@ class HotelResortList extends Component
 
         HotelResortFeedback::create([
             'hotel_resort_id' => $spotId,
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'comment' => $this->newReviewComment,
             'rating' => $this->newReviewRating,
         ]);
