@@ -12,7 +12,19 @@ class HotelResort extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'address',
+        'description',
+        'accommodation',
+        'amenities',
+        'price',
+        'type',
+        'is_active',
+        'images',
+        'lat',
+        'lng'
+    ];
 
     protected $casts = [
         'images' => 'array',

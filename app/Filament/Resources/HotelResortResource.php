@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\HotelResortResource\Pages;
 use App\Models\HotelResort;
+use Cheesegrits\FilamentGoogleMaps\Fields\Geocomplete;
+use Cheesegrits\FilamentGoogleMaps\Fields\Map;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -28,9 +30,63 @@ class HotelResortResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Grid::make(2)->schema([
+                    Forms\Components\Section::make()->schema([
+                        Map::make('location')
+                            ->reactive()
+                            ->afterStateUpdated(function ($state, callable $get, callable $set) {
+                                if (is_array($state)) {
+                                    $set('lat', $state['lat']);
+                                    $set('lng', $state['lng']);
+                                }
+                            })
+                            ->autocomplete(
+                                fieldName: 'address',
+                                types: ['address'],
+                                placeField: 'name',
+                                countries: ['PH'],
+                            )
+                            ->height(fn() => '400px')
+                            ->reverseGeocode([
+                                'city'   => '%L',
+                                'zip'    => '%z',
+                                'state'  => '%A1',
+                                'street' => '%n %S',
+                            ])
+                            ->defaultLocation([14.599512, 120.984222])
+                            ->columnSpanFull(),
+                    ]),
                     Forms\Components\Section::make('Hotel & Resort Information')->schema([
+                        Geocomplete::make('location')
+                            ->isLocation()
+                            ->countries(['PH'])
+                            ->reverseGeocode([
+                                'city'   => '%L',
+                                'zip'    => '%z',
+                                'state'  => '%A1',
+                                'street' => '%n %S',
+                            ])
+                            ->placeholder('Start typing an address ...')
+                            ->reactive()
+                            ->default(fn($record) => $record->address ?? null)
+                            ->afterStateUpdated(function ($state, callable $set) {
+                                if (is_array($state)) {
+                                    if (isset($state['formatted_address'])) {
+                                        $set('address', $state['formatted_address']);
+                                    }
+                                    if (isset($state['lat'])) {
+                                        $set('lat', $state['lat']);
+                                    }
+                                    if (isset($state['lng'])) {
+                                        $set('lng', $state['lng']);
+                                    }
+                                }
+                            }),
                         Forms\Components\TextInput::make('address')
-                            ->required()
+                            ->required(),
+                        Forms\Components\Select::make('restaurant_id')
+                            ->relationship('restaurant', 'name')
+                            ->searchable()
+                            ->preload()
                             ->columnSpanFull(),
                         Forms\Components\TextInput::make('name')
                             ->required()
@@ -52,11 +108,7 @@ class HotelResortResource extends Resource
                             ->native(false)
                             ->required(),
                     ])->columns(2),
-                    Forms\Components\Section::make('Resort Images')->schema([
-                        Forms\Components\FileUpload::make('images')
-                            ->required()
-                            ->multiple(),
-                    ])->collapsible()
+
                 ])->columnSpan([
                     'sm' => 3,
                     'md' => 3,
@@ -66,13 +118,25 @@ class HotelResortResource extends Resource
                     Forms\Components\Section::make('Visibility')->schema([
                         Forms\Components\Toggle::make('is_active')
                             ->label('Active')
-                            ->required(),
+                            ->required()
+                            ->default(true),
                     ]),
+                    Forms\Components\Section::make('Resort Images')->schema([
+                        Forms\Components\FileUpload::make('images')
+                            ->required()
+                            ->multiple(),
+                    ])->collapsible(),
                     Forms\Components\Section::make()->schema([
-                        Forms\Components\TextInput::make('latitude')
-                            ->required(),
-                        Forms\Components\TextInput::make('longitude')
-                            ->required(),
+                        Forms\Components\TextInput::make('lat')
+                            ->required()
+                            ->numeric()
+                            ->reactive()
+                            ->readOnly(),
+                        Forms\Components\TextInput::make('lng')
+                            ->required()
+                            ->numeric()
+                            ->reactive()
+                            ->readOnly(),
                     ]),
                     Forms\Components\Section::make()->schema([
                         Forms\Components\Placeholder::make('created_at')

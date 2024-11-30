@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('hotel_resorts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('restaurant_id');
+            $table->unsignedBigInteger('restaurant_id')->nullable();
             $table->string('address');
             $table->string('name');
             $table->string('description');
             $table->string('accommodation');
             $table->decimal('price', 10, 2);
             $table->string('amenities');
-            $table->string('latitude');
-            $table->string('longitude');
+            $table->string('lat')->nullable();
+            $table->string('lng')->nullable();
             $table->enum('type', ['hotel', 'resort']);
             $table->json('images');
             $table->boolean('is_active')->default(true);

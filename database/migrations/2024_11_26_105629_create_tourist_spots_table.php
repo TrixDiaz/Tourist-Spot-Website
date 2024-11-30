@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('amenities');
             $table->decimal('price', 10, 2);
             $table->json('images');
-            $table->string('latitude');
-            $table->string('longitude');
+            $table->string('lat')->nullable();
+            $table->string('lng')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

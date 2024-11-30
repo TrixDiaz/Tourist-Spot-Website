@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\RestaurantResource\Pages;
 use App\Filament\Resources\RestaurantResource\RelationManagers;
 use App\Models\Restaurant;
+use Cheesegrits\FilamentGoogleMaps\Fields\Geocomplete;
+use Cheesegrits\FilamentGoogleMaps\Fields\Map;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -26,6 +28,59 @@ class RestaurantResource extends Resource
             ->schema([
                 Forms\Components\Grid::make(2)->schema([
                     Forms\Components\Section::make()->schema([
+                        Map::make('location')
+                            ->reactive()
+                            ->afterStateUpdated(function ($state, callable $get, callable $set) {
+                                if (is_array($state)) {
+                                    $set('lat', $state['lat']);
+                                    $set('lng', $state['lng']);
+                                }
+                            })
+                            ->autocomplete(
+                                fieldName: 'address',
+                                types: ['address'],
+                                placeField: 'name',
+                                countries: ['PH'],
+                            )
+                            ->height(fn() => '400px')
+                            ->reverseGeocode([
+                                'city'   => '%L',
+                                'zip'    => '%z',
+                                'state'  => '%A1',
+                                'street' => '%n %S',
+                            ])
+                            ->defaultLocation([14.599512, 120.984222])
+                            ->columnSpanFull(),
+                    ]),
+                    Forms\Components\Section::make()->schema([
+                        Geocomplete::make('location')
+                            ->isLocation()
+                            ->countries(['PH'])
+                            ->reverseGeocode([
+                                'city'   => '%L',
+                                'zip'    => '%z',
+                                'state'  => '%A1',
+                                'street' => '%n %S',
+                            ])
+                            ->placeholder('Start typing an address ...')
+                            ->reactive()
+                            ->default(fn($record) => $record->address ?? null)
+                            ->afterStateUpdated(function ($state, callable $set) {
+                                if (is_array($state)) {
+                                    if (isset($state['formatted_address'])) {
+                                        $set('address', $state['formatted_address']);
+                                    }
+                                    if (isset($state['lat'])) {
+                                        $set('lat', $state['lat']);
+                                    }
+                                    if (isset($state['lng'])) {
+                                        $set('lng', $state['lng']);
+                                    }
+                                }
+                            }),
+                        Forms\Components\TextInput::make('address')
+                            ->maxLength(255)
+                            ->default(null),
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255),
@@ -33,9 +88,7 @@ class RestaurantResource extends Resource
                             ->email()
                             ->maxLength(255)
                             ->default(null),
-                        Forms\Components\TextInput::make('address')
-                            ->maxLength(255)
-                            ->default(null),
+
                         Forms\Components\TextInput::make('phone')
                             ->tel()
                             ->maxLength(255)
@@ -60,6 +113,19 @@ class RestaurantResource extends Resource
                         Forms\Components\TextInput::make('website')
                             ->maxLength(255)
                             ->default(null),
+                    ]),
+
+                    Forms\Components\Section::make()->schema([
+                        Forms\Components\TextInput::make('lat')
+                            ->required()
+                            ->numeric()
+                            ->reactive()
+                            ->readOnly(),
+                        Forms\Components\TextInput::make('lng')
+                            ->required()
+                            ->numeric()
+                            ->reactive()
+                            ->readOnly(),
                     ]),
                     Forms\Components\Section::make()->schema([
                         Forms\Components\Placeholder::make('created_at')

@@ -11,7 +11,7 @@ class Restaurant extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'address', 'description', 'price', 'accomodation', 'amenities', 'latitude', 'longitude', 'images'];
+    protected $fillable = ['name', 'address', 'description', 'price', 'accomodation', 'amenities', 'lat', 'lng', 'images'];
 
     protected $casts = ['images' => 'array'];
 
