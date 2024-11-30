@@ -9,6 +9,7 @@ use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
 
 
+
 class HotelResortList extends Component
 {
     use WithPagination;
@@ -102,5 +103,7 @@ class HotelResortList extends Component
         $this->newReviewRating = 0;
 
         $this->dispatch('review-added');
+
+        toastr()->success('Review added successfully');
     }
 }

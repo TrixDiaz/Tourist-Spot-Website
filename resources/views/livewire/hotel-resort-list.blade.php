@@ -391,6 +391,42 @@
                         </button>
 
                         <p class="text-gray-500 text-md font-semibold mb-4">Reviews</p>
+                        @auth
+                        <!-- Add Review Form -->
+                        <div class="mb-6 p-4 border rounded-lg">
+                            <h3 class="font-semibold mb-4">Add Your Review</h3>
+                            <div class="mb-4">
+                                <div class="flex items-center gap-2">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        <button wire:click="setRating({{ $i }})" type="button" class="focus:outline-none">
+                                        <svg class="w-6 h-6 {{ $i <= $newReviewRating ? 'text-yellow-500' : 'text-gray-300' }} hover:text-yellow-500"
+                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                        </button>
+                                        @endfor
+                                </div>
+                            </div>
+                            <textarea
+                                wire:model="newReviewComment"
+                                class="w-full p-2 border rounded-lg resize-none focus:ring-blue-500 focus:border-blue-500"
+                                rows="3"
+                                placeholder="Write your review here..."></textarea>
+                            <div class="mt-4">
+                                <button
+                                    wire:click="addReview(selectedHotel)"
+                                    class="px-4 py-2 bg-[#19147A] text-white rounded-md hover:bg-emerald-600 transition-colors duration-200">
+                                    Submit Review
+                                </button>
+                            </div>
+                        </div>
+                        @else
+                        <div class="mb-6 p-4 border rounded-lg bg-gray-50">
+                            <p class="text-gray-600">Please <a href="{{ route('login') }}" class="text-[#19147A] underline">login</a> to add a review.</p>
+                        </div>
+                        @endauth
+
+                        <!-- Existing reviews list -->
                         @foreach($hotelResorts as $hotel)
                         <template x-if="selectedHotel === {{ $hotel->id }}">
                             <div class="space-y-4">
