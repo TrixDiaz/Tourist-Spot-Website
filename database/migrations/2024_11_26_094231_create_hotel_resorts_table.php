@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('restaurant_id');
             $table->string('address');
+            $table->string('name');
             $table->string('description');
             $table->string('accommodation');
             $table->decimal('price', 10, 2);

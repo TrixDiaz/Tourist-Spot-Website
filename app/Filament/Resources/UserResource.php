@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class UserResource extends Resource
 {
-    protected static ?string $navigationGroup = "Settings"; 
+    protected static ?string $navigationGroup = "Settings";
 
     protected static ?string $model = User::class;
 
@@ -27,18 +27,30 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\DateTimePicker::make('email_verified_at'),
-                Forms\Components\TextInput::make('password')
-                    ->password()
-                    ->required()
-                    ->maxLength(255),
+                Forms\Components\Section::make('User Information')->schema([
+                    Forms\Components\TextInput::make('name')
+                        ->required(),
+                    Forms\Components\TextInput::make('email')
+                        ->email()
+                        ->required(),
+                    Forms\Components\TextInput::make('password')
+                        ->password()
+                        ->visibleOn(['create']),
+                    Forms\Components\TextInput::make('phone')
+                        ->prefix('+63')
+                        ->placeholder('9123456789')
+                        ->required(),
+                    Forms\Components\Select::make('gender')
+                        ->options(User::GENDER_OPTIONS)
+                        ->required()
+                        ->native(false),
+                    Forms\Components\DatePicker::make('birth_date')
+                        ->required()
+                        ->native(false),
+                    Forms\Components\DatePicker::make('email_verified_at')
+                        ->label('Email Verified At')
+                        ->native(false),
+                ])->columns(2)
             ]);
     }
 
@@ -72,8 +84,8 @@ class UserResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ForceDeleteAction::make()->visible(fn (User $record) => $record->deleted_at !== null),
-                Tables\Actions\RestoreAction::make()->visible(fn (User $record) => $record->deleted_at !== null),
+                Tables\Actions\ForceDeleteAction::make()->visible(fn(User $record) => $record->deleted_at !== null),
+                Tables\Actions\RestoreAction::make()->visible(fn(User $record) => $record->deleted_at !== null),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

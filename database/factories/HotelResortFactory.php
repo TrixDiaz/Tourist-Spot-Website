@@ -19,6 +19,7 @@ class HotelResortFactory extends Factory
     {
         return [
             'address' => fake()->address(),
+            'name' => fake()->name(),
             'description' => fake()->sentence(),
             'accommodation' => fake()->sentence(),
             'type' => fake()->randomElement(['hotel', 'resort']),
