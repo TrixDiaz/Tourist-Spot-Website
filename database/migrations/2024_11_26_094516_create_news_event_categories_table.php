@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('news_event_categories', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('hotel_resort_id');
             $table->string('name');
             $table->string('slug');
             $table->string('description');
             $table->string('images');
             $table->boolean('is_active')->default(true);
+            $table->foreign('hotel_resort_id')->references('id')->on('hotel_resorts')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });

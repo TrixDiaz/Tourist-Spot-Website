@@ -28,4 +28,9 @@ class HotelResort extends Model
     {
         return $this->hasMany(HotelResortFeedback::class, 'hotel_resort_id');
     }
+
+    public function newsEventCategories(): HasMany
+    {
+        return $this->hasMany(NewsEventCategory::class, 'hotel_resort_id');
+    }
 }

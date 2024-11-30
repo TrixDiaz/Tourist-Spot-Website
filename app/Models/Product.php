@@ -11,9 +11,8 @@ class Product extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['product_category_id', 'restaurant_id', 'images', 'name', 'slug', 'description', 'price', 'is_active'];
+    protected $fillable = ['product_category_id', 'restaurant_id', 'image', 'name', 'slug', 'description', 'price', 'is_active'];
 
-    protected $casts = ['images' => 'array'];
 
     public function productCategory(): BelongsTo
     {

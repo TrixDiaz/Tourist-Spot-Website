@@ -23,4 +23,9 @@ class NewsEvent extends Model
     {
         return $this->belongsTo(NewsEventCategory::class);
     }
+
+    public function hotelResort(): BelongsTo
+    {
+        return $this->belongsTo(HotelResort::class);
+    }
 }

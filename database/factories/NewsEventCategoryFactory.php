@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\HotelResort;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,6 +18,7 @@ class NewsEventCategoryFactory extends Factory
     public function definition(): array
     {
         return [
+            'hotel_resort_id' => HotelResort::factory(),
             'name' => fake()->sentence(),
             'slug' => fake()->slug(),
             'description' => fake()->sentence(),

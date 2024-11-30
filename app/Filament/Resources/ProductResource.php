@@ -64,11 +64,10 @@ class ProductResource extends Resource
                             ->rows(3),
                     ])->columns(2),
 
-                    Forms\Components\Section::make('Product Images')->schema([
-                        Forms\Components\FileUpload::make('images')
+                    Forms\Components\Section::make('Product Promotional Image')->schema([
+                        Forms\Components\FileUpload::make('image')
                             ->columnSpanFull()
-                            ->disk('public')
-                            ->multiple(),
+                            ->disk('public'),
                     ])->collapsed(),
 
                 ])->columnSpan([

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
-            $table->json('images')->nullable();
+            $table->string('image')->nullable();
             $table->boolean('is_active')->default(true);
             $table->foreign('product_category_id')->references('id')->on('product_categories');
             $table->foreign('restaurant_id')->references('id')->on('restaurants');

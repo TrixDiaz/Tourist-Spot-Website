@@ -174,17 +174,17 @@
         <!-- Modal Content -->
         <div class="relative min-h-screen flex items-center justify-center p-4">
             <div class="relative bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-                x-data="{ showGallery: false }">
+                x-data="{ showGallery: null }">
                 <!-- Modal Body -->
                 <div class="p-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6"
-                        x-show="!showGallery"
+                        x-show="showGallery === null"
                         x-transition:enter="transition ease duration-250"
-                        x-transition:enter-start="opacity-0 transform -translate-y-4"
-                        x-transition:enter-end="opacity-100 transform translate-y-0"
+                        x-transition:enter-start="opacity-0"
+                        x-transition:enter-end="opacity-100"
                         x-transition:leave="transition ease duration-250"
-                        x-transition:leave-start="opacity-100 transform translate-y-0"
-                        x-transition:leave-end="opacity-0 transform -translate-y-4">
+                        x-transition:leave-start="opacity-100"
+                        x-transition:leave-end="opacity-0">
                         <!-- Map Section - Will appear first on mobile -->
                         <div class="flex flex-col items-end justify-between md:order-2">
                             <button @click="showModal = false" class="text-gray-600 hover:text-gray-900">
@@ -201,12 +201,12 @@
                         <!-- Content Section - Will appear second on mobile -->
                         <div class="space-y-4 md:order-1">
                             @foreach($restaurants as $restaurant)
-                            <template x-if="selectedSpot === {{ $restaurant->id }}">
-                                <div>
+                            <template wire:key="restaurant-{{ $restaurant->id }}" x-if="selectedSpot === {{ $restaurant->id }}">
+                                <div x-ref="restaurant-{{ $restaurant->id }}">
                                     <p class="text-[#19147A] text-3xl font-semibold">{{ $restaurant->name }}</p>
                                     <p class="font-semibold text-sm text-gray-600 my-4">Address: <br> <span class="font-normal text-md text-black">{{ $restaurant->address }}</span></p>
                                     <p class="font-semibold text-sm text-gray-600">Description: <br> <span class="font-normal text-md text-black">{{ $restaurant->description }}</span></p>
-                                    <button @click="showGallery = true"
+                                    <button @click="showGallery = selectedSpot"
                                         class="text-[#19147A] underline text-sm rounded-md">
                                         View Photos
                                     </button>
@@ -295,15 +295,15 @@
                     </div>
 
                     <!-- Gallery Section -->
-                    <div x-show="showGallery"
+                    <div x-show="showGallery !== null"
                         x-transition:enter="transition ease-out duration-300"
-                        x-transition:enter-start="opacity-0 transform translate-y-4"
-                        x-transition:enter-end="opacity-100 transform translate-y-0"
+                        x-transition:enter-start="opacity-0"
+                        x-transition:enter-end="opacity-100"
                         x-transition:leave="transition ease-in duration-200"
-                        x-transition:leave-start="opacity-100 transform translate-y-0"
-                        x-transition:leave-end="opacity-0 transform translate-y-4">
+                        x-transition:leave-start="opacity-100"
+                        x-transition:leave-end="opacity-0">
                         <!-- Back button -->
-                        <button @click="showGallery = false"
+                        <button @click="showGallery = null"
                             class="mb-4 flex items-center text-gray-600 hover:text-gray-900">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -311,39 +311,37 @@
                             Back to details
                         </button>
 
-                        <p class="text-gray-500 text-md font-semibold mb-4">Photo Gallery</p>
+                        <p class="text-gray-500 text-md font-semibold mb-4">Menu Gallery</p>
                         @foreach($restaurants as $restaurant)
-                        <template x-if="selectedSpot === {{ $restaurant->id }}">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                @if($restaurant->images && is_array($restaurant->images))
-                                <!-- Large featured image on the left -->
-                                @if(isset($restaurant->images[0]))
-                                <div class="aspect-square md:aspect-auto md:h-full overflow-hidden rounded-lg">
-                                    <img
-                                        src="{{ Storage::disk('public')->url($restaurant->images[0]) }}"
-                                        alt="{{ $restaurant->name }} featured image"
+                        <div x-show="showGallery === {{ $restaurant->id }}"
+                            wire:key="gallery-{{ $restaurant->id }}">
+                            <!-- Product Images -->
+                            @if($restaurant->products->isNotEmpty())
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                @foreach($restaurant->products as $product)
+                                <div class="aspect-square overflow-hidden rounded-lg relative border border-slate-950">
+                                    @if($product->image)
+                                    <img src="{{ Storage::url($product->image) }}"
+                                        alt="{{ $product->name }}"
                                         class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                                         onerror="this.src='https://placehold.co/600x400'">
-                                </div>
-                                @endif
-
-                                <!-- Grid of smaller images on the right -->
-                                <div class="grid grid-cols-2 gap-4">
-                                    @foreach(array_slice($restaurant->images, 1) as $image)
-                                    <div class="aspect-square overflow-hidden rounded-lg">
-                                        <img
-                                            src="{{ Storage::disk('public')->url($image) }}"
-                                            alt="{{ $restaurant->name }} image"
-                                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                                            onerror="this.src='https://placehold.co/600x400'">
+                                    @else
+                                    <img src="https://placehold.co/600x400"
+                                        alt="{{ $product->name }}"
+                                        class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                                    @endif
+                                    <div class="absolute bottom-0 left-0 right-0 text-white p-4">
+                                        <p class="font-semibold text-sm">{{ $product->name }}</p>
+                                        <p class="text-xs">{{ $product->description }}</p>
+                                        <p class="text-xs">₱{{ number_format($product->price, 2) }}</p>
                                     </div>
-                                    @endforeach
                                 </div>
-                                @else
-                                <div class="col-span-full text-center text-gray-500">No images available</div>
-                                @endif
+                                @endforeach
                             </div>
-                        </template>
+                            @else
+                            <div class="text-center text-gray-500">No menu items available</div>
+                            @endif
+                        </div>
                         @endforeach
                     </div>
                 </div>

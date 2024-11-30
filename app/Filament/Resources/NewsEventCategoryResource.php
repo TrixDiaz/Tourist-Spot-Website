@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\NewsEventCategoryResource\Pages;
 use App\Filament\Resources\NewsEventCategoryResource\RelationManagers;
+use App\Models\HotelResort;
 use App\Models\NewsEventCategory;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -31,6 +32,12 @@ class NewsEventCategoryResource extends Resource
             ->schema([
                 Forms\Components\Grid::make(2)->schema([
                     Forms\Components\Section::make('Category Information')->schema([
+                        Forms\Components\Select::make('hotel_resort_id')
+                            ->label('Hotel Resort')
+                            ->options(HotelResort::all()->pluck('name', 'id'))
+                            ->searchable()
+                            ->preload()
+                            ->columnSpanFull(),
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255)
