@@ -12,10 +12,13 @@ class HotelResortFeedback extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'rating' => 'integer'
+    ];
+
     public function hotelResort(): BelongsTo
-    
     {
-        return $this->belongsTo(HotelResort::class);
+        return $this->belongsTo(HotelResort::class, 'hotel_resort_id');
     }
 
     public function user(): BelongsTo

@@ -16,6 +16,7 @@ class HotelResort extends Model
     protected $casts = [
         'images' => 'array',
         'amenities' => 'array',
+        'price' => 'decimal:2'
     ];
 
     const TYPE_OPTIONS = [
@@ -25,6 +26,6 @@ class HotelResort extends Model
 
     public function reviews(): HasMany
     {
-        return $this->hasMany(HotelResortFeedback::class);
+        return $this->hasMany(HotelResortFeedback::class, 'hotel_resort_id');
     }
 }

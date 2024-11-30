@@ -86,11 +86,11 @@
                                 class="px-8 py-2 bg-transparent border border-white text-white rounded-full hover:bg-white/10 transition-all">
                                 View Tourist Spots
                             </a>
-                            <a href="{{ route('hotels-resorts') }}"
+                            <a href="{{ route('hotel-resorts') }}"
                                 class="px-8 py-2 bg-yellow-400 text-black rounded-full hover:bg-yellow-500 transition-all">
                                 View Hotel & Restaurants
                             </a>
-                            <a href="{{ route('hotels-resorts') }}"
+                            <a href="{{ route('hotel-resorts') }}"
                                 class="px-8 py-2 bg-transparent border border-white text-white rounded-full hover:bg-white/10 transition-all">
                                 View Resorts
                             </a>

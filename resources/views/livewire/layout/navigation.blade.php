@@ -44,7 +44,7 @@ new class extends Component
                     <x-nav-link :href="route('tourist-spots')" :active="request()->routeIs('tourist-spots')" wire:navigate>
                         {{ __('Tourist Spots') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('hotels-resorts')" :active="request()->routeIs('hotels-resorts')" wire:navigate>
+                    <x-nav-link :href="route('hotel-resorts')" :active="request()->routeIs('hotel-resorts')" wire:navigate>
                         {{ __('Hotel & Resorts') }}
                     </x-nav-link>
                     <x-nav-link :href="route('restaurants')" :active="request()->routeIs('restaurants')" wire:navigate>
@@ -115,7 +115,7 @@ new class extends Component
             <x-responsive-nav-link :href="route('tourist-spots')" :active="request()->routeIs('tourist-spots')" wire:navigate>
                 {{ __('Tourist Spots') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('hotels-resorts')" :active="request()->routeIs('hotels-resorts')" wire:navigate>
+            <x-responsive-nav-link :href="route('hotel-resorts')" :active="request()->routeIs('hotel-resorts')" wire:navigate>
                 {{ __('Hotel & Resorts') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('restaurants')" :active="request()->routeIs('restaurants')" wire:navigate>

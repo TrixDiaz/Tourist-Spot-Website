@@ -40,12 +40,11 @@
     </div>
 
     @if($newsEventCategories->count() >= $limit)
-    <div class="flex justify-center mt-8">
-        <button
-            wire:click="loadMore"
-            class="bg-[#19147A] text-white px-6 py-2 rounded-lg hover:bg-[#19147A]/80 transition-colors duration-200">
+    <div class="flex justify-center my-8">
+        <x-secondary-button
+            wire:click="loadMore">
             See More
-        </button>
+        </x-secondary-button>
     </div>
     @endif
 </div>
