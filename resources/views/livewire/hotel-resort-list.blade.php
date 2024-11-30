@@ -8,9 +8,7 @@
                 <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
                 <div class="relative">
                     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                        <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                        </svg>
+                        <x-icons.magnifying-glass-icon class="w-4 h-4" />
                     </div>
                     <input wire:model.live.debounce.500ms="search" type="search" id="default-search"
                         class="block w-full ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
@@ -44,8 +42,8 @@
                     <img src="https://placehold.co/600x400" alt="placeholder"
                         class="h-full w-full border-none object-cover text-gray-700 transition group-hover:scale-125" />
                     @endif
-                    <span class="absolute top-2 left-2 rounded-full bg-yellow-200 px-2 text-xs font-semibold text-yellow-600">
-                        {{ $hotel->type_options[$hotel->type] ?? 'Hotel' }}
+                    <span class="absolute uppercase top-2 left-2 rounded-full bg-yellow-200 px-2 text-xs font-semibold text-yellow-600">
+                        {{ $hotel->type ?? '' }}
                     </span>
                 </div>
             </a>
@@ -53,7 +51,7 @@
                 <a href="#" class="mt-3 overflow-hidden text-xl font-semibold"> {{ $hotel->name }} </a>
                 <p class="text-sm text-gray-600">{{ $hotel->address }}</p>
                 <p class="overflow-hidden text-sm">{{ $hotel->description }}</p>
-                <p class="text-lg font-bold text-[#19147A]">${{ number_format($hotel->price, 2) }}/night</p>
+                <p class="text-lg font-bold text-[#19147A]">₱{{ number_format($hotel->price, 2) }}/night</p>
 
                 <!-- Ratings -->
                 <div class="flex flex-row items-center justify-between py-2">
@@ -89,6 +87,16 @@
             </div>
         </div>
         @endforeach
+    </div>
+
+    <!-- Add See More Button -->
+    <div class="flex justify-center mt-8 mb-6">
+        @if($hotelResorts->hasMorePages())
+        <button wire:click="loadMore"
+            class="px-6 py-2 bg-[#19147A] text-white rounded-md hover:bg-emerald-600 transition-colors duration-200">
+            See More
+        </button>
+        @endif
     </div>
 
     <!-- Filter Drawer -->
