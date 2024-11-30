@@ -191,10 +191,22 @@
                                 <x-icons.x-mark-icon class="w-6 h-6" />
                             </button>
                             <div class="mapswrapper w-full h-[300px] md:h-full object-cover rounded-lg mt-4">
-                                <iframe loading="lazy" width="100%" height="100%" allowfullscreen
-                                    src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=Quezon%20City&zoom=10&maptype=roadmap">
-                                </iframe>
-                                <span class="sr-only">Map</span>
+                                @foreach($restaurants as $restaurant)
+                                <template x-if="selectedSpot === {{ $restaurant->id }}">
+                                    <div class="w-full h-full">
+                                        <iframe
+                                            width="100%"
+                                            height="100%"
+                                            style="border:0"
+                                            loading="lazy"
+                                            allowfullscreen
+                                            referrerpolicy="no-referrer-when-downgrade"
+                                            src="https://www.google.com/maps/embed/v1/place?key={{ env('GOOGLE_MAPS_API_KEY') }}&q={{ $restaurant->address }}">
+                                        </iframe>
+                                    </div>
+                                </template>
+                                @endforeach
+                                <span class="sr-only">Map location</span>
                             </div>
                         </div>
 
