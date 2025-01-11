@@ -23,8 +23,8 @@ class TouristSpotFactory extends Factory
             'price' => fake()->randomFloat(2, 0, 2000),
             'accomodation' => fake()->sentence(),
             'amenities' => fake()->sentence(),
-            'latitude' => fake()->latitude(),
-            'longitude' => fake()->longitude(),
+            'lat' => fake()->latitude(),
+            'lng' => fake()->longitude(),
             'images' => json_encode(fake()->imageUrl()),
         ];
     }
