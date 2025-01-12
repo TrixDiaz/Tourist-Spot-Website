@@ -1,12 +1,12 @@
 <div class="mx-auto max-w-7xl rounded-xl">
-    <div x-data="{ 
+    <div x-data="{
         activeSlide: 0,
         slides: {{ json_encode($popularSpots->map(function($spot, $index) {
             $images = is_array($spot->images) ? $spot->images : [];
             return [
                 'id' => $index,
-                'src' => !empty($images) 
-                    ? Storage::disk('public')->url($images[0]) 
+                'src' => !empty($images)
+                    ? Storage::disk('public')->url($images[0])
                     : asset('images/home.png'),
                 'title' => $spot->name,
                 'description' => $spot->description
@@ -57,7 +57,7 @@
                         <!-- Buttons -->
                         <div class="flex items-center justify-center gap-4 mt-48">
                             <a href="{{ route('tourist-spots') }}"
-                                class="px-8 py-2 bg-transparent border border-white text-white rounded-full hover:bg-white/10 transition-all">
+                              class="px-8 py-2 bg-yellow-400 text-black rounded-full hover:bg-yellow-500 transition-all">
                                 View Tourist Spots
                             </a>
                             <a href="{{ route('hotel-resorts') }}"
@@ -65,7 +65,7 @@
                                 View Hotel & Restaurants
                             </a>
                             <a href="{{ route('hotel-resorts') }}"
-                                class="px-8 py-2 bg-transparent border border-white text-white rounded-full hover:bg-white/10 transition-all">
+                              class="px-8 py-2 bg-yellow-400 text-black rounded-full hover:bg-yellow-500 transition-all">
                                 View Resorts
                             </a>
                         </div>
@@ -75,15 +75,15 @@
         </div>
 
         <!-- Combined navigation and indicators container -->
-        <div class="absolute bottom-4 left-0     right-0 flex justify-center items-center space-x-6 z-30">
+        <div class="absolute bottom-4 left-0 right-0 flex justify-center items-center space-x-6 z-30">
             <!-- Prev button -->
-            <!-- <button @click="prev()"
+            <button @click="prev()"
                 class="p-2 rounded-full"
                 :class="activeSlide === 0 ? 'bg-gray-500 hover:bg-gray-600' : 'bg-gray-500 hover:bg-gray-600'">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-white">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
                 </svg>
-            </button> -->
+            </button>
 
             <!-- Slide indicators -->
             <div class="flex space-x-4">
@@ -99,13 +99,14 @@
             </div>
 
             <!-- Next button -->
-            <!-- <button @click="next()"
+             <button @click="next()"
                 class="p-2 rounded-full"
                 :class="activeSlide === slides.length - 1 ? 'bg-gray-500 hover:bg-gray-600' : 'bg-gray-500 hover:bg-gray-600'">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-white">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                 </svg>
-            </button> -->
+            </button>
+
         </div>
     </div>
 </div>
