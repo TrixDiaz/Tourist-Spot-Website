@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('address');
             $table->string('description');
-            $table->string('accomodation');
+            $table->string('accommodation');
+            $table->boolean('popular')->default(false);
             $table->string('amenities');
             $table->decimal('price', 10, 2);
             $table->json('images');

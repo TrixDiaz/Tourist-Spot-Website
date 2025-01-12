@@ -21,7 +21,7 @@ class TouristSpotFactory extends Factory
             'address' => fake()->address(),
             'description' => fake()->sentence(),
             'price' => fake()->randomFloat(2, 0, 2000),
-            'accomodation' => fake()->sentence(),
+            'accommodation' => fake()->sentence(),
             'amenities' => fake()->sentence(),
             'lat' => fake()->latitude(),
             'lng' => fake()->longitude(),

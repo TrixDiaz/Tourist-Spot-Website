@@ -98,6 +98,15 @@ class TouristSpotResource extends Resource
                 ]),
 
                 Forms\Components\Grid::make(1)->schema([
+                    Forms\Components\Section::make()->schema([
+                        Forms\Components\Toggle::make('popular')
+                            ->label('Popular')
+                            ->onColor('secondary')
+                            ->offColor('danger')
+                            ->onIcon('heroicon-s-star')
+                            ->offIcon('heroicon-s-x-mark')
+                            ->columnSpanFull(),
+                    ]),
                     Forms\Components\Section::make('Images')->schema([
                         Forms\Components\FileUpload::make('images')
                             ->disk('public')
