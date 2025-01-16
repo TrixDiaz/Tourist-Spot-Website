@@ -140,44 +140,6 @@
                         @endforeach
                     </ul>
                 </div>
-                <!-- Price Range Content -->
-                <div class="space-y-4 flex flex-col mt-4">
-                    <p class="text-gray-600 font-semibold">Price Range</p>
-                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-[#D9D9D9]/50 p-4 rounded-md">
-                        <li>
-                            <input type="radio" id="min-price" value="0" name="price" class="hidden peer">
-                            <label for="min-price" class="inline-flex items-center justify-center bg-[#D9D9D9] w-full p-2.5 rounded-md cursor-pointer peer-checked:bg-violet-600 peer-checked:text-white">
-                                <p class="text-normal text-center">MIN</p>
-                            </label>
-                        </li>
-                        <li>
-                            <input type="radio" id="max-price" value="100" name="price" class="hidden peer">
-                            <label for="max-price" class="inline-flex items-center justify-center bg-[#D9D9D9] w-full p-2.5 rounded-md cursor-pointer peer-checked:bg-violet-600 peer-checked:text-white">
-                                <p class="text-normal text-center">MAX</p>
-                            </label>
-                        </li>
-                    </ul>
-                    <ul class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        @foreach([
-                        'lower' => '0-100',
-                        'middle' => '500-1000',
-                        'max' => '1000-2000'
-                        ] as $id => $range)
-                        <li>
-                            <input type="radio"
-                                id="{{ $id }}"
-                                wire:model="priceRange"
-                                value="{{ $range }}"
-                                name="price"
-                                class="hidden peer">
-                            <label for="{{ $id }}"
-                                class="inline-flex items-center justify-center bg-[#D9D9D9] w-full p-2.5 rounded-md cursor-pointer peer-checked:bg-violet-600 peer-checked:text-white">
-                                <p class="text-normal text-center">{{ $range }}</p>
-                            </label>
-                        </li>
-                        @endforeach
-                    </ul>
-                </div>
                 <!-- Clear and Apply Filters -->
                 <div class="flex flex-row items-center justify-between gap-4 my-4">
                     <button wire:click="clearFilters"

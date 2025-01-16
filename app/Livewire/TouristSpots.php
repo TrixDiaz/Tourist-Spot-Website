@@ -13,6 +13,7 @@ class TouristSpots extends Component
 
     public $search = '';
     public $perPage = 6;
+
     public $rating = null;
     public $priceRange = null;
     public $newReviewComment = '';
@@ -39,10 +40,6 @@ class TouristSpots extends Component
                         ->groupBy('tourist_spot_id')
                         ->havingRaw('AVG(rating) >= ?', [$this->rating]);
                 });
-            })
-            ->when($this->priceRange, function ($query) {
-                [$min, $max] = explode('-', $this->priceRange);
-                $query->whereBetween('price', [$min, $max]);
             })
             ->with(['reviews.user'])
             ->withAvg('reviews', 'rating')
