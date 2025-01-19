@@ -291,9 +291,11 @@ class HotelResortResource extends Resource implements HasShieldPermissions
                     ->extraAttributes([
                         'class' => 'capitalize',
                     ]),
-                Tables\Columns\IconColumn::make('is_active')
+                Tables\Columns\ToggleColumn::make('is_active')
                     ->label('Status')
-                    ->boolean(),
+                    ->onIcon('heroicon-s-bolt')
+                    ->offIcon('heroicon-s-bolt-slash')
+                    ->disabled(fn () => !auth()->user()->hasRole(1)),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

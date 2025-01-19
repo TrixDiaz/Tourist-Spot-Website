@@ -129,7 +129,7 @@ class RestaurantResource extends Resource implements HasShieldPermissions
                                 ->label('Publish')
                                 ->required()
                                 ->default(false),
-                        ])->visible(fn (): bool => auth()->user()->hasRole(1)),
+                        ])->visible(fn(): bool => auth()->user()->hasRole(1)),
                     Forms\Components\Section::make()->schema([
                         Forms\Components\TextInput::make('website')
                             ->maxLength(255)
@@ -272,6 +272,11 @@ class RestaurantResource extends Resource implements HasShieldPermissions
                 Tables\Columns\TextColumn::make('website')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\ToggleColumn::make('is_active')
+                    ->label('Status')
+                    ->onIcon('heroicon-s-bolt')
+                    ->offIcon('heroicon-s-bolt-slash')
+                    ->disabled(fn() => !auth()->user()->hasRole(1)),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

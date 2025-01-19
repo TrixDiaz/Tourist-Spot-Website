@@ -59,9 +59,9 @@ class TouristSpotResource extends Resource implements HasShieldPermissions
                             )
                             ->height(fn() => '400px')
                             ->reverseGeocode([
-                                'city'   => '%L',
-                                'zip'    => '%z',
-                                'state'  => '%A1',
+                                'city' => '%L',
+                                'zip' => '%z',
+                                'state' => '%A1',
                                 'street' => '%n %S',
                             ])
                             ->defaultLocation([14.599512, 120.984222])
@@ -72,9 +72,9 @@ class TouristSpotResource extends Resource implements HasShieldPermissions
                             ->isLocation()
                             ->countries(['PH'])
                             ->reverseGeocode([
-                                'city'   => '%L',
-                                'zip'    => '%z',
-                                'state'  => '%A1',
+                                'city' => '%L',
+                                'zip' => '%z',
+                                'state' => '%A1',
                                 'street' => '%n %S',
                             ])
                             ->placeholder('Start typing an address ...')
@@ -119,7 +119,7 @@ class TouristSpotResource extends Resource implements HasShieldPermissions
                             ->onIcon('heroicon-s-star')
                             ->offIcon('heroicon-s-x-mark')
                             ->columnSpanFull(),
-                    ])->visible(fn (): bool => auth()->user()->hasRole(1)),
+                    ])->visible(fn(): bool => auth()->user()->hasRole(1)),
                     Forms\Components\Section::make('Images')->schema([
                         Forms\Components\FileUpload::make('images')
                             ->disk('public')
@@ -145,7 +145,7 @@ class TouristSpotResource extends Resource implements HasShieldPermissions
                         Forms\Components\Placeholder::make('created_at')
                             ->label('Created at')
                             ->hiddenOn('create')
-                            ->content(function (\Illuminate\Database\Eloquent\Model $record): String {
+                            ->content(function (\Illuminate\Database\Eloquent\Model $record): string {
                                 $category = TouristSpot::find($record->id);
                                 $now = \Carbon\Carbon::now();
 
@@ -195,7 +195,7 @@ class TouristSpotResource extends Resource implements HasShieldPermissions
                             }),
                         Forms\Components\Placeholder::make('updated_at')
                             ->label('Last modified at')
-                            ->content(function (\Illuminate\Database\Eloquent\Model $record): String {
+                            ->content(function (\Illuminate\Database\Eloquent\Model $record): string {
                                 $category = TouristSpot::find($record->id);
                                 $now = \Carbon\Carbon::now();
 
@@ -272,6 +272,11 @@ class TouristSpotResource extends Resource implements HasShieldPermissions
                     ->searchable()
                     ->limit(20)
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\ToggleColumn::make('is_active')
+                    ->label('Status')
+                    ->onIcon('heroicon-s-bolt')
+                    ->offIcon('heroicon-s-bolt-slash')
+                    ->disabled(fn() => !auth()->user()->hasRole(1)),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
