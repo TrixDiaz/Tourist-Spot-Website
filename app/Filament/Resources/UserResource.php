@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -15,8 +16,19 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class UserResource extends Resource
+class UserResource extends Resource implements HasShieldPermissions
 {
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view_any',
+            'view',
+            'create',
+            'update',
+            'delete',
+        ];
+    }
+
     protected static ?string $navigationGroup = "Settings";
 
     protected static ?string $model = User::class;
@@ -29,7 +41,8 @@ class UserResource extends Resource
             ->schema([
                 Forms\Components\Section::make('User Information')->schema([
                     Forms\Components\TextInput::make('name')
-                        ->required(),
+                        ->required()
+                        ->columnSpanFull(),
                     Forms\Components\TextInput::make('email')
                         ->email()
                         ->required(),
@@ -47,10 +60,17 @@ class UserResource extends Resource
                     Forms\Components\DatePicker::make('birth_date')
                         ->required()
                         ->native(false),
+                ])->columns(2),
+                Forms\Components\Section::make()->schema([
+                    Forms\Components\Select::make('roles')
+                        ->relationship('roles', 'name')
+                        ->multiple()
+                        ->preload()
+                        ->searchable(),
                     Forms\Components\DatePicker::make('email_verified_at')
                         ->label('Email Verified At')
                         ->native(false),
-                ])->columns(2)
+                ])->columns(2),
             ]);
     }
 

@@ -6,6 +6,7 @@ use App\Filament\Resources\NewsEventCategoryResource\Pages;
 use App\Filament\Resources\NewsEventCategoryResource\RelationManagers;
 use App\Models\HotelResort;
 use App\Models\NewsEventCategory;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -16,8 +17,18 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class NewsEventCategoryResource extends Resource
+class NewsEventCategoryResource extends Resource implements HasShieldPermissions
 {
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view_any',
+            'view',
+            'create',
+            'update',
+            'delete',
+        ];
+    }
     protected static ?string $navigationGroup = 'News & Events';
 
     protected static ?string $navigationLabel = 'Categories';

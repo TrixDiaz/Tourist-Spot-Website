@@ -32,9 +32,17 @@
             style="transition-delay: calc({{ $loop->index }} * 100ms);">
             <a href="#" class="col-span-2 text-left text-gray-600 hover:text-gray-700">
                 <div class="group relative h-full w-full overflow-hidden">
-                    <img src="https://placehold.co/600x400" alt="" class="h-full w-full border-none object-cover text-gray-700 transition group-hover:scale-125" />
-                    <!-- <span class="absolute top-2 left-2 rounded-full bg-yellow-200 px-2 text-xs font-semibold text-yellow-600">Unity</span> -->
-                    <img src="/images/AnbWyIjnwNbW9Wz6c_cja.svg" class="absolute inset-1/2 w-10 max-w-full -translate-x-1/2 -translate-y-1/2 transition group-hover:scale-125" alt="" />
+                    @if($restaurant->images && is_array($restaurant->images) && count($restaurant->images) > 0)
+                        <img src="{{ Storage::disk('public')->url($restaurant->images[0]) }}"
+                             alt="{{ $restaurant->name }}"
+                             class="h-full w-full border-none object-cover text-gray-700 transition group-hover:scale-125" />
+                    @else
+                        <img src="https://placehold.co/600x400" alt="placeholder"
+                             class="h-full w-full border-none object-cover text-gray-700 transition group-hover:scale-125" />
+                    @endif
+                    <span class="absolute uppercase top-2 left-2 rounded-full bg-yellow-200 px-2 text-xs font-semibold text-yellow-600">
+                        {{ $hotel->type ?? '' }}
+                    </span>
                 </div>
             </a>
             <div class="col-span-3 flex flex-col space-y-2 pr-8 text-left">
@@ -217,7 +225,7 @@
                                 <div x-ref="restaurant-{{ $restaurant->id }}">
                                     <p class="text-[#19147A] text-3xl font-semibold">{{ $restaurant->name }}</p>
                                     <p class="font-semibold text-sm text-gray-600 my-4">Address: <br> <span class="font-normal text-md text-black">{{ $restaurant->address }}</span></p>
-                                    <p class="font-semibold text-sm text-gray-600">Description: <br> <span class="font-normal text-md text-black">{{ $restaurant->description }}</span></p>
+                                    <p class="font-semibold text-sm text-gray-600">Menu: <br> <span class="font-normal text-md text-black">{{ $restaurant->description }}</span></p>
                                     <button @click="showGallery = selectedSpot"
                                         class="text-[#19147A] underline text-sm rounded-md">
                                         View Photos

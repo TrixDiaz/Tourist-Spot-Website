@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('lng')->nullable();
             $table->enum('type', ['hotel', 'resort']);
             $table->json('images');
-            $table->boolean('is_active')->default(true);
+            $table->boolean('is_active')->default(false);
             $table->foreign('restaurant_id')->references('id')->on('restaurants')->nullable();
             $table->softDeletes();
             $table->timestamps();

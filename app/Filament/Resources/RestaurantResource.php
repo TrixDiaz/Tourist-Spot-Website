@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\RestaurantResource\Pages;
 use App\Filament\Resources\RestaurantResource\RelationManagers;
 use App\Models\Restaurant;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Cheesegrits\FilamentGoogleMaps\Fields\Geocomplete;
 use Cheesegrits\FilamentGoogleMaps\Fields\Map;
 use Filament\Forms;
@@ -15,8 +16,19 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class RestaurantResource extends Resource
+class RestaurantResource extends Resource implements HasShieldPermissions
 {
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view_any',
+            'view',
+            'create',
+            'update',
+            'delete',
+        ];
+    }
+
     protected static ?string $navigationGroup = 'Restaurant';
     protected static ?string $model = Restaurant::class;
 
@@ -44,9 +56,9 @@ class RestaurantResource extends Resource
                             )
                             ->height(fn() => '400px')
                             ->reverseGeocode([
-                                'city'   => '%L',
-                                'zip'    => '%z',
-                                'state'  => '%A1',
+                                'city' => '%L',
+                                'zip' => '%z',
+                                'state' => '%A1',
                                 'street' => '%n %S',
                             ])
                             ->defaultLocation([14.599512, 120.984222])
@@ -57,9 +69,9 @@ class RestaurantResource extends Resource
                             ->isLocation()
                             ->countries(['PH'])
                             ->reverseGeocode([
-                                'city'   => '%L',
-                                'zip'    => '%z',
-                                'state'  => '%A1',
+                                'city' => '%L',
+                                'zip' => '%z',
+                                'state' => '%A1',
                                 'street' => '%n %S',
                             ])
                             ->placeholder('Start typing an address ...')
@@ -80,7 +92,8 @@ class RestaurantResource extends Resource
                             }),
                         Forms\Components\TextInput::make('address')
                             ->maxLength(255)
-                            ->default(null),
+                            ->default(null)
+                            ->readOnly(),
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255),
@@ -109,6 +122,14 @@ class RestaurantResource extends Resource
                 ]),
 
                 Forms\Components\Grid::make(1)->schema([
+
+                    Forms\Components\Section::make('Visibility')
+                        ->schema([
+                            Forms\Components\Toggle::make('is_active')
+                                ->label('Publish')
+                                ->required()
+                                ->default(false),
+                        ])->visible(fn (): bool => auth()->user()->hasRole(1)),
                     Forms\Components\Section::make()->schema([
                         Forms\Components\TextInput::make('website')
                             ->maxLength(255)
@@ -131,7 +152,7 @@ class RestaurantResource extends Resource
                         Forms\Components\Placeholder::make('created_at')
                             ->label('Created at')
                             ->hiddenOn('create')
-                            ->content(function (\Illuminate\Database\Eloquent\Model $record): String {
+                            ->content(function (\Illuminate\Database\Eloquent\Model $record): string {
                                 $category = Restaurant::find($record->id);
                                 $now = \Carbon\Carbon::now();
 
@@ -181,7 +202,7 @@ class RestaurantResource extends Resource
                             }),
                         Forms\Components\Placeholder::make('updated_at')
                             ->label('Last modified at')
-                            ->content(function (\Illuminate\Database\Eloquent\Model $record): String {
+                            ->content(function (\Illuminate\Database\Eloquent\Model $record): string {
                                 $category = Restaurant::find($record->id);
                                 $now = \Carbon\Carbon::now();
 

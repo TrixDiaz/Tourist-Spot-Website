@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\HotelResortResource\Pages;
 use App\Models\HotelResort;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Cheesegrits\FilamentGoogleMaps\Fields\Geocomplete;
 use Cheesegrits\FilamentGoogleMaps\Fields\Map;
 use Filament\Forms;
@@ -15,8 +16,19 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class HotelResortResource extends Resource
+class HotelResortResource extends Resource implements HasShieldPermissions
 {
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view_any',
+            'view',
+            'create',
+            'update',
+            'delete',
+        ];
+    }
+
     protected static ?string $navigationGroup = 'Hotel & Resort';
 
     protected static ?string $navigationLabel = 'Hotel & Resort';
@@ -47,9 +59,9 @@ class HotelResortResource extends Resource
                             )
                             ->height(fn() => '400px')
                             ->reverseGeocode([
-                                'city'   => '%L',
-                                'zip'    => '%z',
-                                'state'  => '%A1',
+                                'city' => '%L',
+                                'zip' => '%z',
+                                'state' => '%A1',
                                 'street' => '%n %S',
                             ])
                             ->defaultLocation([14.599512, 120.984222])
@@ -60,9 +72,9 @@ class HotelResortResource extends Resource
                             ->isLocation()
                             ->countries(['PH'])
                             ->reverseGeocode([
-                                'city'   => '%L',
-                                'zip'    => '%z',
-                                'state'  => '%A1',
+                                'city' => '%L',
+                                'zip' => '%z',
+                                'state' => '%A1',
                                 'street' => '%n %S',
                             ])
                             ->placeholder('Start typing an address ...')
@@ -82,7 +94,8 @@ class HotelResortResource extends Resource
                                 }
                             }),
                         Forms\Components\TextInput::make('address')
-                            ->required(),
+                            ->required()
+                            ->readOnly(),
                         Forms\Components\Select::make('restaurant_id')
                             ->relationship('restaurant', 'name')
                             ->searchable()
@@ -117,10 +130,10 @@ class HotelResortResource extends Resource
                 Forms\Components\Grid::make(1)->schema([
                     Forms\Components\Section::make('Visibility')->schema([
                         Forms\Components\Toggle::make('is_active')
-                            ->label('Active')
+                            ->label('Publish')
                             ->required()
-                            ->default(true),
-                    ]),
+                            ->default(false),
+                    ])->visible(fn(): bool => auth()->user()->hasRole(1)),
                     Forms\Components\Section::make('Resort Images')->schema([
                         Forms\Components\FileUpload::make('images')
                             ->required()
@@ -142,7 +155,7 @@ class HotelResortResource extends Resource
                         Forms\Components\Placeholder::make('created_at')
                             ->label('Created at')
                             ->hiddenOn('create')
-                            ->content(function (\Illuminate\Database\Eloquent\Model $record): String {
+                            ->content(function (\Illuminate\Database\Eloquent\Model $record): string {
                                 $category = HotelResort::find($record->id);
                                 $now = \Carbon\Carbon::now();
 
@@ -192,7 +205,7 @@ class HotelResortResource extends Resource
                             }),
                         Forms\Components\Placeholder::make('updated_at')
                             ->label('Last modified at')
-                            ->content(function (\Illuminate\Database\Eloquent\Model $record): String {
+                            ->content(function (\Illuminate\Database\Eloquent\Model $record): string {
                                 $category = HotelResort::find($record->id);
                                 $now = \Carbon\Carbon::now();
 

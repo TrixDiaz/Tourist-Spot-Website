@@ -23,6 +23,7 @@ return new class extends Migration
             $table->json('images');
             $table->string('lat')->nullable();
             $table->string('lng')->nullable();
+            $table->boolean('is_active')->default(false);
             $table->softDeletes();
             $table->timestamps();
         });

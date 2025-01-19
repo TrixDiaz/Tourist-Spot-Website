@@ -29,8 +29,8 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
-                'secondary' => Color::Emerald,
+                'primary' => Color::Emerald,
+                'secondary' => Color::Amber,
                 'danger' => Color::Red,
                 'success' => Color::Green,
                 'warning' => Color::Yellow,
@@ -56,7 +56,8 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
-                FilamentApexChartsPlugin::make()
+                FilamentApexChartsPlugin::make(),
+                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
             ])
             ->databaseNotifications()
             ->databaseNotificationsPolling('30s');

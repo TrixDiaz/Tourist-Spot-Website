@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('lng')->nullable();
             $table->json('images')->nullable();
             $table->string('website')->nullable();
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
         });
     }

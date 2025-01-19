@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -15,8 +16,19 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class ProductResource extends Resource
+class ProductResource extends Resource implements HasShieldPermissions
 {
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view_any',
+            'view',
+            'create',
+            'update',
+            'delete',
+        ];
+    }
+
     protected static ?string $navigationGroup = 'Restaurant';
 
     protected static ?string $model = Product::class;
@@ -31,6 +43,12 @@ class ProductResource extends Resource
                     Forms\Components\Section::make('Product Information')->schema([
                         Forms\Components\Select::make('product_category_id')
                             ->relationship('productCategory', 'name')
+                            ->required()
+                            ->native(false)
+                            ->searchable()
+                            ->preload(),
+                        Forms\Components\Select::make('restaurant_id')
+                            ->relationship('restaurant', 'name')
                             ->required()
                             ->native(false)
                             ->searchable()

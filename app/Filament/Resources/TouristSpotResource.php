@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\TouristSpotResource\Pages;
 use App\Filament\Resources\TouristSpotResource\RelationManagers;
 use App\Models\TouristSpot;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Cheesegrits\FilamentGoogleMaps\Fields\Geocomplete;
 use Cheesegrits\FilamentGoogleMaps\Fields\Map;
 use Filament\Forms;
@@ -15,8 +16,19 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class TouristSpotResource extends Resource
+class TouristSpotResource extends Resource implements HasShieldPermissions
 {
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view_any',
+            'view',
+            'create',
+            'update',
+            'delete',
+        ];
+    }
+
     protected static ?string $navigationGroup = "Tourist Spots";
 
     protected static ?string $navigationLabel = "Tourist Spots";
@@ -82,7 +94,8 @@ class TouristSpotResource extends Resource
                                 }
                             }),
                         Forms\Components\TextInput::make('address')
-                            ->required(),
+                            ->required()
+                            ->readOnly(),
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->columnSpanFull(),
@@ -98,15 +111,15 @@ class TouristSpotResource extends Resource
                 ]),
 
                 Forms\Components\Grid::make(1)->schema([
-                    Forms\Components\Section::make()->schema([
+                    Forms\Components\Section::make('Visibility')->schema([
                         Forms\Components\Toggle::make('popular')
-                            ->label('Popular')
+                            ->label('Publish')
                             ->onColor('secondary')
                             ->offColor('danger')
                             ->onIcon('heroicon-s-star')
                             ->offIcon('heroicon-s-x-mark')
                             ->columnSpanFull(),
-                    ]),
+                    ])->visible(fn (): bool => auth()->user()->hasRole(1)),
                     Forms\Components\Section::make('Images')->schema([
                         Forms\Components\FileUpload::make('images')
                             ->disk('public')

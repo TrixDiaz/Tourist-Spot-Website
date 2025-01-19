@@ -6,36 +6,17 @@ use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
 class TotalVisitors extends ApexChartWidget
 {
-    /**
-     * Chart Id
-     *
-     * @var string
-     */
     protected static ?string $chartId = 'totalVisitors';
-
-    /**
-     * Widget Title
-     *
-     * @var string|null
-     */
     protected static ?string $heading = 'Total Visitors';
-
-    /**
-     * Chart options (series, labels, types, size, animations...)
-     * https://apexcharts.com/docs/options
-     *
-     * @return array
-     */
-
-     /**
-     *  Sort
-     */
     protected static ?int $sort = 2;
-
-    /**
-     * Widget content height
-     */
     protected static ?int $contentHeight = 270;
+
+    // Add this method to control visibility
+    public static function canView(): bool
+    {
+        return auth()->user()->hasRole('super_admin');
+    }
+
     protected function getOptions(): array
     {
         return [
