@@ -10,7 +10,18 @@ class TouristSpot extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'address', 'description', 'price', 'accommodation', 'popular', 'amenities', 'latitude', 'longitude', 'images'];
+    protected $fillable = [
+        'name',
+        'address',
+        'description',
+        'price',
+        'accommodation',
+        'popular',
+        'amenities',
+        'latitude',
+        'longitude',
+        'images'
+    ];
 
     protected $casts = [
         'images' => 'array',
