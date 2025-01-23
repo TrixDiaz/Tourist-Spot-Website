@@ -32,9 +32,14 @@
             style="transition-delay: calc({{ $loop->index }} * 100ms);">
             <a href="#" class="col-span-2 text-left text-gray-600 hover:text-gray-700">
                 <div class="group relative h-full w-full overflow-hidden">
-                    <img src="https://placehold.co/600x400" alt="" class="h-full w-full border-none object-cover text-gray-700 transition group-hover:scale-125" />
-                    <!-- <span class="absolute top-2 left-2 rounded-full bg-yellow-200 px-2 text-xs font-semibold text-yellow-600">Unity</span> -->
-                    <img src="/images/AnbWyIjnwNbW9Wz6c_cja.svg" class="absolute inset-1/2 w-10 max-w-full -translate-x-1/2 -translate-y-1/2 transition group-hover:scale-125" alt="" />
+                    @if($spot->images && is_array($spot->images) && count($spot->images) > 0)
+                        <img src="{{ Storage::disk('public')->url($spot->images[0]) }}"
+                             alt="{{ $spot->name }}"
+                             class="h-full w-full border-none object-cover text-gray-700 transition group-hover:scale-125" />
+                    @else
+                        <img src="https://placehold.co/600x400" alt="placeholder"
+                             class="h-full w-full border-none object-cover text-gray-700 transition group-hover:scale-125" />
+                    @endif
                 </div>
             </a>
             <div class="col-span-3 flex flex-col space-y-2 pr-8 text-left">
