@@ -273,7 +273,7 @@ class RestaurantResource extends Resource implements HasShieldPermissions
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\ToggleColumn::make('is_active')
-                    ->label('Status')
+                    ->label('Publish')
                     ->onIcon('heroicon-s-bolt')
                     ->offIcon('heroicon-s-bolt-slash')
                     ->disabled(fn() => !auth()->user()->hasRole(1)),

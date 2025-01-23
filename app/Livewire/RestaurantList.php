@@ -25,6 +25,7 @@ class RestaurantList extends Component
     public function getRestaurantsProperty()
     {
         return Restaurant::query()
+            ->where('is_active', true)
             ->when($this->search, function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%')
                     ->orWhere('address', 'like', '%' . $this->search . '%');
@@ -44,7 +45,7 @@ class RestaurantList extends Component
             }])
             ->with('products')
             ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage)->where('is_active', true);
+            ->paginate($this->perPage);
     }
 
     public function applyFilters()
