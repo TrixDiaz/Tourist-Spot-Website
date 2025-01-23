@@ -80,7 +80,7 @@
 
     <!-- Load More Button -->
     <div class="flex justify-center items-center my-8">
-        @if($restaurants->hasMorePages())
+        @if($restaurants->count('is_active', true) >= 6 && $restaurants->hasMorePages())
         <button
             wire:click="loadMore"
             wire:loading.attr="disabled"

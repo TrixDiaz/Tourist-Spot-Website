@@ -12,6 +12,7 @@ class TouristSpots extends Component
     use WithPagination;
 
     public $search = '';
+
     public $perPage = 6;
 
     public $rating = null;
@@ -44,7 +45,7 @@ class TouristSpots extends Component
             ->with(['reviews.user'])
             ->withAvg('reviews', 'rating')
             ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage);
+            ->paginate($this->perPage)->where('is_active', true);
     }
 
     public function applyFilters()

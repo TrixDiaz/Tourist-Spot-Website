@@ -71,7 +71,7 @@
 
     <!-- Load More Button -->
     <div class="flex justify-center items-center my-8">
-        @if($touristSpots->hasMorePages())
+        @if($touristSpots->count('is_active', true) >= 6 && $touristSpots->hasMorePages())
         <button
             wire:click="loadMore"
             wire:loading.attr="disabled"

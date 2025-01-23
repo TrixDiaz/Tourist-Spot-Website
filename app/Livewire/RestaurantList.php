@@ -44,7 +44,7 @@ class RestaurantList extends Component
             }])
             ->with('products')
             ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage);
+            ->paginate($this->perPage)->where('is_active', true);
     }
 
     public function applyFilters()
@@ -91,7 +91,7 @@ class RestaurantList extends Component
     public function render()
     {
         return view('livewire.restaurant-list', [
-            'restaurants' => $this->restaurants
+            'restaurants' => $this->restaurants,
         ]);
     }
 }

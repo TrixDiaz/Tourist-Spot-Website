@@ -91,7 +91,7 @@
 
     <!-- Add See More Button -->
     <div class="flex justify-center mt-8 mb-6">
-        @if($hotelResorts->hasMorePages())
+        @if($hotelResorts->count('is_active', true) >= 6 && $hotelResorts->hasMorePages())
         <button wire:click="loadMore"
             class="flex flex-row items-center justify-center gap-1 text-sm font-semibold">
             See More

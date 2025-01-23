@@ -52,7 +52,7 @@ class HotelResortList extends Component
             ->with(['reviews.user'])
             ->withAvg('reviews', 'rating')
             ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage);
+            ->paginate($this->perPage)->where('is_active', true);
     }
 
     public function applyFilters()
