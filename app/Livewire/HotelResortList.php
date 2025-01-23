@@ -32,7 +32,8 @@ class HotelResortList extends Component
         return HotelResort::query()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('address', 'like', '%' . $this->search . '%');
+                    $q->where('name', 'like', '%' . $this->search . '%')
+                        ->orWhere('address', 'like', '%' . $this->search . '%');
                 });
             })
             ->when($this->rating, function ($query) {

@@ -10,7 +10,7 @@
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                         </svg>
                     </div>
-                    <input wire:model.live.debounce.500ms="search" type="search" id="default-search" class="block w-full ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search..." required />
+                    <input wire:model.live.debounce.500ms="search" type="search" id="default-search" class="block w-full ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search by name or address" required />
                 </div>
             </form>
             <button @click="filterOpen = true">
@@ -46,9 +46,9 @@
                 </div>
             </a>
             <div class="col-span-3 flex flex-col space-y-2 pr-8 text-left">
+                <a href="#" class="text-sm font-semibold text-gray-500 hover:text-gray-700">{{ $restaurant->name }}</a>
                 <a href="#" class="mt-3 overflow-hidden text-xl font-semibold"> {{ $restaurant->address }} </a>
                 <p class="overflow-hidden text-sm">{{ $restaurant->description }}</p>
-                <a href="#" class="text-sm font-semibold text-gray-500 hover:text-gray-700">{{ $restaurant->name }}</a>
                 <!-- Ratings -->
                 <div class="flex flex-row items-center justify-between py-2">
                     <div class="mt-2 flex items-center">

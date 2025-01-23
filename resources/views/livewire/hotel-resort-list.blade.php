@@ -12,7 +12,7 @@
                     </div>
                     <input wire:model.live.debounce.500ms="search" type="search" id="default-search"
                         class="block w-full ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Search by location..." required />
+                        placeholder="Search by name or address" required />
                 </div>
             </form>
             <button @click="filterOpen = true">
