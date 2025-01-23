@@ -43,9 +43,9 @@
                 </div>
             </a>
             <div class="col-span-3 flex flex-col space-y-2 pr-8 text-left">
-                <a href="#" class="text-sm font-semibold text-gray-500 hover:text-gray-700">{{ $spot->name }}</a>
-                <a href="#" class="mt-3 overflow-hidden text-xl font-semibold"> {{ $spot->address }} </a>
+                <a href="#" class="mt-3 overflow-hidden text-xl font-semibold"> {{ $spot->name }} </a>
                 <p class="overflow-hidden text-sm">{{ $spot->description }}</p>
+                <a href="#" class="text-sm font-semibold text-gray-500 hover:text-gray-700">{{ $spot->address }}</a>
                 <!-- Ratings -->
                 <div class="flex flex-row items-center justify-between py-2">
                     <div class="mt-2 flex items-center">
